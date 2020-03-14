@@ -1,33 +1,309 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:layout_width="match_parent"
+    <Button
+        android:id="@+id/buttonKE"
+        android:layout_width="50dp"
         android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
+        android:layout_marginTop="5dp"
+        android:text="KE"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:popupTheme="@style/AppTheme.PopupOverlay" />
+    <Button
+        android:id="@+id/buttonMA"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:text="MA"
 
-    </com.google.android.material.appbar.AppBarLayout>
+        app:layout_constraintEnd_toStartOf="@+id/buttonTI"
+        app:layout_constraintTop_toTopOf="@+id/buttonKE" />
 
-    <include layout="@layout/content_main" />
+    <Button
+        android:id="@+id/buttonTI"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:text="TI"
+        app:layout_constraintEnd_toStartOf="@+id/buttonKE"
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab"
+        app:layout_constraintTop_toTopOf="@+id/buttonKE" />
+
+    <Button
+        android:id="@+id/buttonTO"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:text="TO"
+        app:layout_constraintStart_toEndOf="@+id/buttonKE"
+        app:layout_constraintTop_toTopOf="@+id/buttonKE" />
+
+    <Button
+        android:id="@+id/buttonPE"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+
+        android:text="PE"
+        app:layout_constraintStart_toEndOf="@+id/buttonTO"
+        app:layout_constraintTop_toTopOf="@+id/buttonTO" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/group"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/button12"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:text="PLAT"
+        app:layout_constraintEnd_toStartOf="@+id/buttonMA"
+        app:layout_constraintTop_toBottomOf="@+id/buttonMA" />
+
+    <Button
+        android:id="@+id/button13"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:text="VARV"
+        app:layout_constraintEnd_toEndOf="@+id/button12"
+        app:layout_constraintTop_toBottomOf="@+id/button12" />
+
+    <Button
+        android:id="@+id/button14"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:text="VARK"
+        app:layout_constraintEnd_toEndOf="@+id/button13"
+        app:layout_constraintTop_toBottomOf="@+id/button13" />
+
+    <Button
+        android:id="@+id/button15"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:text="VARO"
+        app:layout_constraintEnd_toEndOf="@+id/button14"
+        app:layout_constraintTop_toBottomOf="@+id/button14" />
+
+    <Button
+        android:id="@+id/button16"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:text="PUMP"
+        app:layout_constraintEnd_toEndOf="@+id/button15"
+        app:layout_constraintTop_toBottomOf="@+id/button15" />
+
+    <Button
+        android:id="@+id/button17"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:text="KVES"
+        app:layout_constraintEnd_toEndOf="@+id/button16"
+        app:layout_constraintTop_toBottomOf="@+id/button16" />
+
+    <Button
+        android:id="@+id/buttonR7"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:text="R7"
+        app:layout_constraintEnd_toEndOf="@+id/button17"
+        app:layout_constraintTop_toBottomOf="@+id/button17" />
+
+    <Button
+        android:id="@+id/buttonR8"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:text="R8"
+        app:layout_constraintEnd_toEndOf="@+id/buttonR7"
+        app:layout_constraintTop_toBottomOf="@+id/buttonR7" />
+
+
+    <Button
+        android:id="@+id/button120"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:text="PLAT"
+        app:layout_constraintStart_toEndOf="@+id/buttonPE"
+        app:layout_constraintTop_toBottomOf="@+id/buttonPE" />
+
+    <Button
+        android:id="@+id/button130"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:text="VARV"
+        app:layout_constraintEnd_toEndOf="@+id/button120"
+        app:layout_constraintTop_toBottomOf="@+id/button120" />
+
+    <Button
+        android:id="@+id/button140"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:text="VARK"
+        app:layout_constraintEnd_toEndOf="@+id/button130"
+        app:layout_constraintTop_toBottomOf="@+id/button130" />
+
+    <Button
+        android:id="@+id/button150"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:text="VARO"
+        app:layout_constraintEnd_toEndOf="@+id/button140"
+        app:layout_constraintTop_toBottomOf="@+id/button140" />
+
+    <Button
+        android:id="@+id/button160"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:text="PUMP"
+        app:layout_constraintEnd_toEndOf="@+id/button150"
+        app:layout_constraintTop_toBottomOf="@+id/button150" />
+
+    <Button
+        android:id="@+id/button170"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:text="KVES"
+        app:layout_constraintEnd_toEndOf="@+id/button160"
+        app:layout_constraintTop_toBottomOf="@+id/button160" />
+
+    <Button
+        android:id="@+id/buttonR70"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:text="R7"
+        app:layout_constraintEnd_toEndOf="@+id/button170"
+        app:layout_constraintTop_toBottomOf="@+id/button170" />
+
+    <Button
+        android:id="@+id/buttonR80"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:text="R8"
+        app:layout_constraintEnd_toEndOf="@+id/buttonR70"
+        app:layout_constraintTop_toBottomOf="@+id/buttonR70" />
+
+    <TextView
+        android:id="@+id/text_timeNow"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@android:drawable/ic_dialog_email" />
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="8dp"
+        android:text="Text now"
+        app:layout_constraintStart_toEndOf="@+id/buttonR8"
+        app:layout_constraintTop_toBottomOf="@+id/buttonR8" />
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+    <TextView
+        android:id="@+id/text_timeSet"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="32dp"
+        android:text="Time set"
+        app:layout_constraintEnd_toStartOf="@+id/buttonR80"
+        app:layout_constraintTop_toBottomOf="@+id/buttonR80" />
+
+    <Button
+        android:id="@+id/dayToLeft"
+        android:layout_width="62dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="48dp"
+        android:text="-d"
+        app:layout_constraintStart_toStartOf="@+id/buttonR8"
+        app:layout_constraintTop_toBottomOf="@+id/buttonR8" />
+
+    <Button
+        android:id="@+id/hourToLeft"
+        android:layout_width="62dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="5dp"
+        android:text="-h"
+        app:layout_constraintStart_toEndOf="@+id/dayToLeft"
+        app:layout_constraintTop_toTopOf="@+id/dayToLeft" />
+
+    <Button
+        android:id="@+id/minutesToLeft"
+        android:layout_width="62dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="5dp"
+        android:text="-"
+        app:layout_constraintStart_toEndOf="@+id/hourToLeft"
+        app:layout_constraintTop_toTopOf="@+id/hourToLeft" />
+
+    <Button
+        android:id="@+id/minutesToRight"
+        android:layout_width="62dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="5dp"
+        android:text="+"
+        app:layout_constraintStart_toEndOf="@+id/minutesToLeft"
+        app:layout_constraintTop_toTopOf="@+id/minutesToLeft" />
+
+    <Button
+        android:id="@+id/hourToRight"
+        android:layout_width="62dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="5dp"
+        android:text="+h"
+        app:layout_constraintStart_toEndOf="@+id/minutesToRight"
+        app:layout_constraintTop_toTopOf="@+id/minutesToRight" />
+
+    <Button
+        android:id="@+id/dayToRight"
+        android:layout_width="62dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="5dp"
+        android:text="+d"
+        app:layout_constraintStart_toEndOf="@+id/hourToRight"
+        app:layout_constraintTop_toTopOf="@+id/hourToRight" />
+
+    <Button
+        android:id="@+id/button_confirm"
+        android:layout_width="139dp"
+        android:layout_height="47dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="16dp"
+        android:text="OK"
+        app:layout_constraintStart_toEndOf="@+id/hourToLeft"
+        app:layout_constraintTop_toBottomOf="@+id/minutesToRight" />
+
+    <Button
+        android:id="@+id/button_check"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="16dp"
+        android:text="Tark"
+        app:layout_constraintStart_toStartOf="@+id/dayToLeft"
+        app:layout_constraintTop_toBottomOf="@+id/button_confirm" />
+
+    <Button
+        android:id="@+id/button_track"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Tapaht"
+        app:layout_constraintStart_toEndOf="@+id/button_check"
+        app:layout_constraintTop_toTopOf="@+id/button_check" />
+
+    <Button
+        android:id="@+id/button_measurements"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Mitta"
+        app:layout_constraintStart_toStartOf="@+id/minutesToRight"
+        app:layout_constraintTop_toTopOf="@+id/button_track" />
+
+    <Button
+        android:id="@+id/button_settings"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Asetukset"
+        app:layout_constraintStart_toEndOf="@+id/button_measurements"
+        app:layout_constraintTop_toTopOf="@+id/button_measurements" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
