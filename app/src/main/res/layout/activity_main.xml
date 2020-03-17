@@ -54,11 +54,6 @@
         app:layout_constraintStart_toEndOf="@+id/buttonTO"
         app:layout_constraintTop_toTopOf="@+id/buttonTO" />
 
-    <androidx.constraintlayout.widget.Group
-        android:id="@+id/group"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
     <Button
         android:id="@+id/button12"
         android:layout_width="70dp"
@@ -122,6 +117,35 @@
         android:text="R8"
         app:layout_constraintEnd_toEndOf="@+id/buttonR7"
         app:layout_constraintTop_toBottomOf="@+id/buttonR7" />
+
+
+    <TextView
+        android:id="@+id/text_timeN"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="8dp"
+        android:text="Text now"
+        app:layout_constraintStart_toEndOf="@+id/buttonR8"
+        app:layout_constraintTop_toBottomOf="@+id/buttonR8" />
+
+    <TextView
+        android:id="@+id/text_timeSet"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:text="Time set"
+        app:layout_constraintEnd_toStartOf="@+id/buttonR80"
+        app:layout_constraintTop_toTopOf="@+id/text_timeNow" />
+
+    <Button
+        android:id="@+id/dayToLeft"
+        android:layout_width="62dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="48dp"
+        android:text="-d"
+        app:layout_constraintStart_toStartOf="@+id/buttonR8"
+        app:layout_constraintTop_toBottomOf="@+id/buttonR8" />
 
 
     <Button
@@ -188,6 +212,15 @@
         app:layout_constraintEnd_toEndOf="@+id/buttonR70"
         app:layout_constraintTop_toBottomOf="@+id/buttonR70" />
 
+
+    <Button
+        android:id="@+id/buttonR80"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:text="R8"
+        app:layout_constraintEnd_toEndOf="@+id/buttonR70"
+        app:layout_constraintTop_toBottomOf="@+id/buttonR70" />
+
     <TextView
         android:id="@+id/text_timeNow"
         android:layout_width="wrap_content"
@@ -198,24 +231,6 @@
         app:layout_constraintStart_toEndOf="@+id/buttonR8"
         app:layout_constraintTop_toBottomOf="@+id/buttonR8" />
 
-    <TextView
-        android:id="@+id/text_timeSet"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="32dp"
-        android:text="Time set"
-        app:layout_constraintEnd_toStartOf="@+id/buttonR80"
-        app:layout_constraintTop_toBottomOf="@+id/buttonR80" />
-
-    <Button
-        android:id="@+id/dayToLeft"
-        android:layout_width="62dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="48dp"
-        android:text="-d"
-        app:layout_constraintStart_toStartOf="@+id/buttonR8"
-        app:layout_constraintTop_toBottomOf="@+id/buttonR8" />
 
     <Button
         android:id="@+id/hourToLeft"
@@ -305,5 +320,15 @@
         android:text="Asetukset"
         app:layout_constraintStart_toEndOf="@+id/button_measurements"
         app:layout_constraintTop_toTopOf="@+id/button_measurements" />
+
+    <com.example.rouman.Canvass
+        android:id="@+id/canvasView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="@+id/buttonR8"
+        app:layout_constraintEnd_toStartOf="@+id/button150"
+        app:layout_constraintStart_toEndOf="@+id/button16"
+        app:layout_constraintTop_toBottomOf="@+id/buttonKE" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

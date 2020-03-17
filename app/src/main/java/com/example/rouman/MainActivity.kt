@@ -1,27 +1,32 @@
 package com.example.rouman
 
+import android.annotation.SuppressLint
 import android.os.Bundle
-import com.google.android.material.snackbar.Snackbar
+import android.view.View
+import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
-import android.view.Menu
-import android.view.MenuItem
 
-import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
+    @SuppressLint("ResourceType")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-//        setSupportActionBar(toolbar)
 
-/*        fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
+        val customCanvas =
+            findViewById<View>(R.id.canvasView) as Canvass
 
+        val bu =
+            findViewById<View>(R.id.button_confirm) as Button
+        bu.setOnClickListener {
+            // Do something in response to button click
+            customCanvas.clearCanvas() // to clear canvas
         }
-*/
+
     }
+
+
 
 
 /*    override fun onCreateOptionsMenu(menu: Menu): Boolean {
