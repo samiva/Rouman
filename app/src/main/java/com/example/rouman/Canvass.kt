@@ -13,8 +13,14 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
 import android.widget.TextView
+import com.example.rouman.MainActivity.Companion.deltaTime
+import com.example.rouman.MainActivity.Companion.globalDpSet
 import com.example.rouman.MainActivity.Companion.globalTimeSet
-
+import com.example.rouman.MainActivity.Companion.timeOnWeekStart
+import com.example.rouman.MainActivity.Companion.timeOnWeekEnd
+import com.example.rouman.MainActivity.Companion.timeToDp
+import com.example.rouman.MainActivity.Companion.dpToTime
+import java.text.SimpleDateFormat
 
 
 class Canvass(context: Context, attrs: AttributeSet?) :
@@ -42,7 +48,7 @@ class Canvass(context: Context, attrs: AttributeSet?) :
         val width = getWidth()
         val height = getHeight().toFloat()
 
-        val paint = Paint()
+        var paint = Paint()
         paint.setARGB(255, 255, 0, 0)
         paint.setStrokeWidth(14f)
         canvas.drawLine(0f, 30f, width.toFloat(), 30f, paint)
@@ -52,13 +58,24 @@ class Canvass(context: Context, attrs: AttributeSet?) :
         // Draw setting line
         paint.setARGB(255, 255, 0, 0)
         paint.setStrokeWidth(14f)
-        canvas.drawLine(globalTimeSet.toFloat(), 0f, globalTimeSet.toFloat(), height, paint)
+        canvas.drawLine(globalDpSet.toFloat(), 0f, globalDpSet.toFloat(), height, paint)
 
 
         // draw the mPath with the mPaint on the canvas when onDraw
         canvas.drawPath(mPath, mPaint)
 
+        ///////////////////////////////////////////////
+        // Draw current timeline
 
+        val pros = ((System.currentTimeMillis() - timeOnWeekStart).toFloat()/ (timeOnWeekEnd - timeOnWeekStart).toFloat())
+
+        val currentTimeDp =  pros * width.toFloat()
+        timeToDp =  currentTimeDp.toFloat() / (System.currentTimeMillis() - timeOnWeekStart).toFloat()
+        dpToTime =  (System.currentTimeMillis() - timeOnWeekStart).toFloat() / currentTimeDp.toFloat()
+
+        paint.setARGB(255, 255, 0, 0)
+        paint.setStrokeWidth(4f)
+        canvas.drawLine(currentTimeDp, 0f, currentTimeDp, height, paint)
 
     }
 
@@ -69,7 +86,7 @@ class Canvass(context: Context, attrs: AttributeSet?) :
 //        mY = y
 
 
-        globalTimeSet = x.toInt()
+        globalDpSet = x
 
     }
 
@@ -82,10 +99,13 @@ class Canvass(context: Context, attrs: AttributeSet?) :
   //          mX = x
   //          mY = y
 
-            globalTimeSet=x.toInt()
+            globalDpSet=x
+            globalTimeSet = timeOnWeekStart.toFloat() + globalDpSet*dpToTime.toFloat()
+            val sdf_set = SimpleDateFormat("HH:mm dd")
+            var set = sdf_set.format(globalTimeSet)
             val tv = getRootView().findViewById<TextView>(R.id.text_timeSet)
             if (tv != null)
-            {tv.text=globalTimeSet.toString()}
+            {tv.text=set}
 
 
         }
