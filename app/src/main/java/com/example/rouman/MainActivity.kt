@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import org.jetbrains.anko.internals.AnkoInternals.getContext
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.time.milliseconds
 import android.widget.TextView as TextView1
 
 
@@ -77,25 +78,32 @@ class MainActivity : AppCompatActivity() {
 
         ////////////////////////////////////////////////
         // Aika nyt
-        var time_now = System.currentTimeMillis()
+        var syTime = System.currentTimeMillis()
 
         ////////////////////////////////////////////////
         // Aika viikon alussa
         var sdf_year = SimpleDateFormat("yyyy")
         var sdf_month = SimpleDateFormat("MM")
         var sdf_day = SimpleDateFormat("dd")
+        var sdf_h = SimpleDateFormat("HH")
+        var sdf_m = SimpleDateFormat("mm")
 
 
         sdf_year.timeZone = tz
         sdf_month.timeZone = tz
         sdf_day.timeZone = tz
+        sdf_h.timeZone = tz
+        sdf_m.timeZone = tz
 
-        val year = sdf_year.format(time_now).toInt()
-        val month = sdf_month.format(time_now).toInt()
-        val day = sdf_day.format(time_now).toInt()
-        var dayNumber = sdf_dayNumber.format(time_now).toInt()
+        val year = sdf_year.format(syTime).toInt()
+        val month = sdf_month.format(syTime).toInt()
+        val day = sdf_day.format(syTime).toInt()
+        var dayNumber = sdf_dayNumber.format(syTime).toInt()
+        var h= sdf_h.format(syTime).toInt()
+        var m = sdf_m.format(syTime).toInt()
 
-
+        //////////////
+        // KORJAA REUNAPÖIVÄKUNM KUUKAUSI VAIHTUU
         var calendar = GregorianCalendar(
             year,
             month,
@@ -104,7 +112,7 @@ class MainActivity : AppCompatActivity() {
             0
         )
 
-        timeOnWeekStart = calendar.timeInMillis.toFloat()
+        timeOnWeekStart = calendar.timeInMillis
 
 
         ///////////////////////////////////////////////
@@ -117,7 +125,8 @@ class MainActivity : AppCompatActivity() {
             0
         )
 
-        timeOnWeekEnd = calendar.timeInMillis.toFloat()
+        timeOnWeekEnd = calendar.timeInMillis
+
 
         ////////////////////////////////////////////////
         // Muunnoskertoimet
@@ -126,22 +135,32 @@ class MainActivity : AppCompatActivity() {
         //val canvasV = findViewById<View>(R.id.canvasView) as Canvass
 
         // Current time to screen
-        val readableTime = sdf_show.format(time_now)
+        val readableTime = sdf_show.format(syTime)
 //        val readableTime = sdf_show.format(timeOnWeekStart)
 
         val tv = findViewById<android.widget.TextView>(R.id.text_timeNow)
         if (tv != null)
            {tv.text = readableTime}
 
+        calendar = GregorianCalendar(
+            year,
+            month,
+            day,
+            h,
+            m
+        )
+        curTime = calendar.timeInMillis
+
     }
 
     companion object {
         var globalDpSet = 0f
-        var globalTimeSet = 10f
-        var timeOnWeekStart = 1f
-        var timeOnWeekEnd = 1f
 
-        var deltaTime=578f
+        var globalTimeSet: Long = 10
+        var timeOnWeekStart: Long = 1
+        var timeOnWeekEnd: Long = 1
+        var curTime: Long =1
+        var deltaTime: Long = 578
 
         var timeToDp = 1f
         var dpToTime = 1f

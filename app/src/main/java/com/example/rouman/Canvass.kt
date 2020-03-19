@@ -19,6 +19,7 @@ import com.example.rouman.MainActivity.Companion.globalTimeSet
 import com.example.rouman.MainActivity.Companion.timeOnWeekStart
 import com.example.rouman.MainActivity.Companion.timeOnWeekEnd
 import com.example.rouman.MainActivity.Companion.timeToDp
+import com.example.rouman.MainActivity.Companion.curTime
 import com.example.rouman.MainActivity.Companion.dpToTime
 import java.text.SimpleDateFormat
 
@@ -61,21 +62,25 @@ class Canvass(context: Context, attrs: AttributeSet?) :
         canvas.drawLine(globalDpSet.toFloat(), 0f, globalDpSet.toFloat(), height, paint)
 
 
-        // draw the mPath with the mPaint on the canvas when onDraw
-        canvas.drawPath(mPath, mPaint)
 
         ///////////////////////////////////////////////
         // Draw current timeline
+        val systemTime = System.currentTimeMillis()
+        val pros = ((systemTime-timeOnWeekStart).toFloat()/ (timeOnWeekEnd - timeOnWeekStart).toFloat())
 
-        val pros = ((System.currentTimeMillis() - timeOnWeekStart).toFloat()/ (timeOnWeekEnd - timeOnWeekStart).toFloat())
+        var currentTimeDp =  pros * width.toFloat()
+        timeToDp =  currentTimeDp / (System.currentTimeMillis() - timeOnWeekStart).toFloat()
 
-        val currentTimeDp =  pros * width.toFloat()
-        timeToDp =  currentTimeDp.toFloat() / (System.currentTimeMillis() - timeOnWeekStart).toFloat()
-        dpToTime =  (System.currentTimeMillis() - timeOnWeekStart).toFloat() / currentTimeDp.toFloat()
+        dpToTime =  (System.currentTimeMillis() - timeOnWeekStart) / currentTimeDp
 
-        paint.setARGB(255, 255, 0, 0)
+        paint.setARGB(255, 0, 0, 0)
         paint.setStrokeWidth(4f)
+        currentTimeDp = (curTime-timeOnWeekStart) * timeToDp
         canvas.drawLine(currentTimeDp, 0f, currentTimeDp, height, paint)
+
+
+        // draw the mPath with the mPaint on the canvas when onDraw
+        canvas.drawPath(mPath, mPaint)
 
     }
 
@@ -100,7 +105,7 @@ class Canvass(context: Context, attrs: AttributeSet?) :
   //          mY = y
 
             globalDpSet=x
-            globalTimeSet = timeOnWeekStart.toFloat() + globalDpSet*dpToTime.toFloat()
+            globalTimeSet = timeOnWeekStart + (globalDpSet*dpToTime).toLong()
             val sdf_set = SimpleDateFormat("HH:mm dd")
             var set = sdf_set.format(globalTimeSet)
             val tv = getRootView().findViewById<TextView>(R.id.text_timeSet)
