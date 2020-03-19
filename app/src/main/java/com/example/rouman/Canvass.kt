@@ -1,3 +1,10 @@
+// Globaalit muuttujat
+// getviewid alaluokassa
+// tietokannan luonti
+// Tietueen luonti
+// onDraw
+
+
 package com.example.rouman;
 
 import android.content.Context
@@ -5,9 +12,10 @@ import android.graphics.*
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
+import android.widget.TextView
+import com.example.rouman.MainActivity.Companion.globalTimeSet
 
 
-var settingLineX = 100
 
 class Canvass(context: Context, attrs: AttributeSet?) :
     View(context, attrs) {
@@ -44,8 +52,7 @@ class Canvass(context: Context, attrs: AttributeSet?) :
         // Draw setting line
         paint.setARGB(255, 255, 0, 0)
         paint.setStrokeWidth(14f)
-        canvas.drawLine(settingLineX.toFloat(), 0f, settingLineX.toFloat(), height, paint)
-
+        canvas.drawLine(globalTimeSet.toFloat(), 0f, globalTimeSet.toFloat(), height, paint)
 
 
         // draw the mPath with the mPaint on the canvas when onDraw
@@ -57,11 +64,13 @@ class Canvass(context: Context, attrs: AttributeSet?) :
 
     // when ACTION_DOWN start touch according to the x,y values
     private fun startTouch(x: Float, y: Float) {
-        mPath.moveTo(x, y)
-        mX = x
-        mY = y
+//        mPath.moveTo(x, y)
+//        mX = x
+//        mY = y
 
-        settingLineX=x.toInt()
+
+        globalTimeSet = x.toInt()
+
     }
 
     // when ACTION_MOVE move touch according to the x,y values
@@ -69,11 +78,15 @@ class Canvass(context: Context, attrs: AttributeSet?) :
         val dx = Math.abs(x - mX)
         val dy = Math.abs(y - mY)
         if (dx >= TOLERANCE || dy >= TOLERANCE) {
-            mPath.quadTo(mX, mY, (x + mX) / 2, (y + mY) / 2)
-            mX = x
-            mY = y
+  //          mPath.quadTo(mX, mY, (x + mX) / 2, (y + mY) / 2)
+  //          mX = x
+  //          mY = y
 
-            settingLineX=x.toInt()
+            globalTimeSet=x.toInt()
+            val tv = getRootView().findViewById<TextView>(R.id.text_timeSet)
+            if (tv != null)
+            {tv.text=globalTimeSet.toString()}
+
 
         }
     }
@@ -85,7 +98,7 @@ class Canvass(context: Context, attrs: AttributeSet?) :
 
     // when ACTION_UP stop touch
     private fun upTouch() {
-        mPath.lineTo(mX, mY)
+//        mPath.lineTo(mX, mY)
     }
 
     //override the onTouchEvent
@@ -110,7 +123,7 @@ class Canvass(context: Context, attrs: AttributeSet?) :
     }
 
     companion object {
-        private const val TOLERANCE = 5f
+        private const val TOLERANCE = 1f
     }
 
     init {

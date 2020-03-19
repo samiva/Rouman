@@ -1,10 +1,15 @@
 package com.example.rouman
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.graphics.Canvas
 import android.os.Bundle
 import android.view.View
+import android.view.ViewTreeObserver
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
+import org.jetbrains.anko.internals.AnkoInternals.getContext
+import android.widget.TextView as TextView1
 
 
 class MainActivity : AppCompatActivity() {
@@ -14,16 +19,31 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val customCanvas =
-            findViewById<View>(R.id.canvasView) as Canvass
-
+//        val customCanvas =
+//            findViewById<View>(R.id.canvasView) as Canvass
+/*
         val bu =
             findViewById<View>(R.id.button_confirm) as Button
         bu.setOnClickListener {
-            // Do something in response to button click
-            customCanvas.clearCanvas() // to clear canvas
-        }
 
+            // Do something in response to button click
+//            customCanvas.clearCanvas() // to clear canvas
+        }
+*/
+
+/*
+        val textSetView =
+            findViewById<TextView1>(R.id.text_timeSet) as TextView1
+        textSetView.setText(globalTimeSet.toString())  //settingLineX.toString()
+
+        var context = getContext(this)
+        class tView : TextView1(context){
+            override fun onDraw(canvas: Canvas){
+                super.onDraw(canvas)
+                textSetView.setText(globalTimeSet.toString())  //settingLineX.toString()
+           }
+        }
+*/
     }
 
 
@@ -45,4 +65,8 @@ class MainActivity : AppCompatActivity() {
         }
     }
 */
+companion object {
+    var globalTimeSet=10
+}
+
 }
