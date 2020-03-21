@@ -41,22 +41,26 @@ class MainActivity : AppCompatActivity() {
         val button_plat = findViewById<View>(R.id.button12) as Button
         button_plat.setOnClickListener {
             propoStatus += 1
-            if (propoStatus == 4)
+            if (propoStatus == 4) {
                 propoStatus = 0
-
+                changeProposed=false
+            }
             propoY = button_plat.getTop().toFloat()
             if (propoStatus == 1) {
                 proposedRelay = "PLAT"
                 proposedStatus = "1"
+                changeProposed=true
             }
-            if (propoStatus == 1) {
+            if (propoStatus == 2) {
                 proposedRelay = "PLAT"
                 proposedStatus = "2"
+                changeProposed=true
 
             }
-            if (propoStatus == 1) {
+            if (propoStatus == 3) {
                 proposedRelay = "PLAT"
                 proposedStatus = "3"
+                changeProposed=true
             }
             val c = findViewById<View>(R.id.canvasView) as Canvass
             c.invalidate()
@@ -68,7 +72,7 @@ class MainActivity : AppCompatActivity() {
             // Jos on tekstiä JA aika kalenterista on suurempi kuin systeemiaika
              if (changeProposed) {
 
-                val controlEvent = ControlEvent(
+                val newEvent = ControlEvent(
                     uid = null,
                     time = globalTimeSet,
                     relay = proposedRelay,
@@ -83,12 +87,12 @@ class MainActivity : AppCompatActivity() {
                                 "control_events"
                             )
                             .build()
-                    db.controlEventDao().insert(controlEvent)
+                    db.controlEventDao().insert(newEvent)
                     db.close()
 
 //                        setAlarm(reminder.time!!, reminder.message)
 
-                    finish()
+                    //finish()
 
                     toast("Change saved and alarm created")
 

@@ -61,6 +61,7 @@ class Canvass(context: Context, attrs: AttributeSet?) :
         if (b_plat != null){
 
             val plat_y  = b_plat.getTop().toFloat() // top.toFloat()
+
 /*
             paint.setARGB(255, 0, 0, 0)
             paint.setStrokeWidth(14f)
@@ -79,19 +80,25 @@ class Canvass(context: Context, attrs: AttributeSet?) :
         if (b_varv != null){
 
             //val plat_y  = b_varv.getTop().toFloat() // top.toFloat()
-
-            if(propoStatus==1)
-                paint.setARGB(255, 255, 0, 0)
-            if(propoStatus==2)
-                paint.setARGB(255, 0, 0, 255)
-            if(propoStatus==3)
-                paint.setARGB(255, 0, 255, 0)
-            paint.setStrokeWidth(14f)
-            canvas.drawLine(globalDpSet.toFloat(), propoY+14, width.toFloat(), propoY+14, paint)
-
+            if(propoStatus != 0) {
+                if (propoStatus == 1)
+                    paint.setARGB(255, 255, 0, 0)
+                if (propoStatus == 2)
+                    paint.setARGB(255, 0, 0, 255)
+                if (propoStatus == 3)
+                    paint.setARGB(255, 0, 255, 0)
+                paint.setStrokeWidth(14f)
+                canvas.drawLine(
+                    globalDpSet.toFloat(),
+                    propoY + 14,
+                    width.toFloat(),
+                    propoY + 14,
+                    paint
+                )
+            }
         }
 
-
+        //////////////////////////////////////////////////////////////////
         // Draw setting line
         paint.setARGB(255, 255, 0, 0)
         paint.setStrokeWidth(14f)
@@ -99,12 +106,6 @@ class Canvass(context: Context, attrs: AttributeSet?) :
 
         ///////////////////////////////////////////////
         // Draw current timeline
-//        val systemTime = System.currentTimeMillis()
-//        val pros = ((systemTime-timeOnWeekStart).toFloat()/ (timeOnWeekEnd - timeOnWeekStart).toFloat())
-//        var currentTimeDp =  pros * width.toFloat()
-//        timeToDp =  currentTimeDp / (System.currentTimeMillis() - timeOnWeekStart).toFloat()
-//        dpToTime =  (System.currentTimeMillis() - timeOnWeekStart) / currentTimeDp
-
         val systemTime = curTime
         val pros = ((systemTime-timeOnWeekStart).toFloat()/ (timeOnWeekEnd - timeOnWeekStart).toFloat())
         var currentTime =  pros * width.toFloat()
@@ -115,8 +116,6 @@ class Canvass(context: Context, attrs: AttributeSet?) :
         paint.setStrokeWidth(4f)
         var currentTimeDp = (curTime-timeOnWeekStart) * timeToDp
         canvas.drawLine(currentTimeDp, 0f, currentTimeDp, height, paint)
-
-
 
     }
 
