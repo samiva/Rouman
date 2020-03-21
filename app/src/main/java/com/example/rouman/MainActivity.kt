@@ -221,12 +221,12 @@ class MainActivity : AppCompatActivity() {
 
         //////////////////////////////
         // Read database
-        refreshList()
+ //       refreshList()
     }
 
     private fun refreshList(){
         doAsync {
-            val db = Room.databaseBuilder(applicationContext, AppDatabase::class.java, "controlEvents").build()
+            val db = Room.databaseBuilder(applicationContext, AppDatabase::class.java, "control_events").build()
             val cEventList = db.controlEventDao().getControlEvents()
             db.close()
 
