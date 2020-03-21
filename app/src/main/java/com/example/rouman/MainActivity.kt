@@ -1,7 +1,10 @@
 package com.example.rouman
 
 import android.annotation.SuppressLint
+import android.app.AlarmManager
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import android.graphics.Canvas
 import android.icu.util.TimeZone
 import android.os.Bundle
@@ -9,12 +12,19 @@ import android.view.View
 import android.view.ViewTreeObserver
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
+import androidx.room.Room
+import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.internals.AnkoInternals.getContext
+import org.jetbrains.anko.toast
+import org.jetbrains.anko.uiThread
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.time.milliseconds
 import android.widget.TextView as TextView1
 
+import kotlinx.android.synthetic.main.activity_main.*
+
+import androidx.room.Database
 
 class MainActivity : AppCompatActivity() {
 
@@ -23,31 +33,81 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-/*
-        val bu =
-            findViewById<View>(R.id.button_confirm) as Button
-        bu.setOnClickListener {
-
-            // Do something in response to button click
-//            customCanvas.clearCanvas() // to clear canvas
+        button_list.setOnClickListener {
+            val intent = Intent(applicationContext, ListActivity::class.java)
+            startActivity(intent)
         }
-*/
 
-/*
-        val textSetView =
-            findViewById<TextView1>(R.id.text_timeSet) as TextView1
-        textSetView.setText(globalTimeSet.toString())  //settingLineX.toString()
+        val button_plat = findViewById<View>(R.id.button12) as Button
+        button_plat.setOnClickListener {
+            propoStatus += 1
+            if (propoStatus == 4)
+                propoStatus = 0
 
-        var context = getContext(this)
-        class tView : TextView1(context){
-            override fun onDraw(canvas: Canvas){
-                super.onDraw(canvas)
-                textSetView.setText(globalTimeSet.toString())  //settingLineX.toString()
-           }
+            propoY = button_plat.getTop().toFloat()
+            if (propoStatus == 1) {
+                proposedRelay = "PLAT"
+                proposedStatus = "1"
+            }
+            if (propoStatus == 1) {
+                proposedRelay = "PLAT"
+                proposedStatus = "2"
+
+            }
+            if (propoStatus == 1) {
+                proposedRelay = "PLAT"
+                proposedStatus = "3"
+            }
+            val c = findViewById<View>(R.id.canvasView) as Canvass
+            c.invalidate()
         }
-*/
+
+        val button_confirm = findViewById<View>(R.id.button_confirm) as Button
+        button_confirm.setOnClickListener {
+
+            // Jos on tekstiä JA aika kalenterista on suurempi kuin systeemiaika
+             if (changeProposed) {
+
+                val controlEvent = ControlEvent(
+                    uid = null,
+                    time = globalTimeSet,
+                    relay = proposedRelay,
+                    setting = proposedStatus
+                )
+
+                doAsync {
+                    val db =
+                        Room.databaseBuilder(
+                                applicationContext,
+                                AppDatabase::class.java,
+                                "control_events"
+                            )
+                            .build()
+                    db.controlEventDao().insert(controlEvent)
+                    db.close()
+
+//                        setAlarm(reminder.time!!, reminder.message)
+
+                    finish()
+
+                    toast("Change saved and alarm created")
+
+                }
+                changeProposed = false
+            }
+        }
     }
 
+    private fun setAlarm(time: Long, controlEvent: ControlEvent){
+/*        val intent = Intent(this, ReminderReceiver::class.java)
+        intent.putExtra("message",message)
+        val pendingIntent = PendingIntent.getBroadcast(this, 1, intent, PendingIntent.FLAG_ONE_SHOT)
+        val manager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        manager.setExact(AlarmManager.RTC,time,pendingIntent)
+
+        runOnUiThread{toast("Reminder is created")}
+*/
+    }
 
 /*    override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -77,9 +137,11 @@ class MainActivity : AppCompatActivity() {
         val tz = java.util.TimeZone.getDefault()
 
         ////////////////////////////////////////////////
+        ////////////////////////////////////////////////
         // Aika nyt
         var syTime = System.currentTimeMillis()
 
+        ////////////////////////////////////////////////
         ////////////////////////////////////////////////
         // Aika viikon alussa
         var sdf_year = SimpleDateFormat("yyyy")
@@ -102,8 +164,10 @@ class MainActivity : AppCompatActivity() {
         var h= sdf_h.format(syTime).toInt()
         var m = sdf_m.format(syTime).toInt()
 
-        //////////////
-        // KORJAA REUNAPÖIVÄKUNM KUUKAUSI VAIHTUU
+        ////////////////////////////////////////////////////////////
+        // KORJAA !!  KUN KUUKAUSI VAIHTUU kesken viikon
+        ////////////////////////////////////////////////////////////
+
         var calendar = GregorianCalendar(
             year,
             month,
@@ -111,10 +175,9 @@ class MainActivity : AppCompatActivity() {
             0, //timePicker.currentHour,
             0
         )
-
         timeOnWeekStart = calendar.timeInMillis
 
-
+        ///////////////////////////////////////////////
         ///////////////////////////////////////////////
         // Aika viikon lopussa
         calendar = GregorianCalendar(
@@ -151,9 +214,49 @@ class MainActivity : AppCompatActivity() {
         )
         curTime = calendar.timeInMillis
 
+
+        //////////////////////////////
+        // Read database
+        refreshList()
     }
 
+    private fun refreshList(){
+        doAsync {
+            val db = Room.databaseBuilder(applicationContext, AppDatabase::class.java, "controlEvents").build()
+            val cEventList = db.controlEventDao().getControlEvents()
+            db.close()
+
+// tätä voisi muokata jos haluaisi control eventit tekstimuodossa tai jossain muussa tyylissä näkyviin vaikka toiseen UI:hin
+/*
+            uiThread {
+                if (reminders.isNotEmpty()) {
+                    val adapter = ReminderAdapter(applicationContext, reminders )
+                    list1.adapter = adapter
+                } else {
+                    toast("No reminders")
+                }
+            }
+*/
+        }
+
+    }
+
+    ///////////////////////////////////////////////////////////////
+    // Piirretään tietokanta ruutuun, vaihtaen painttia CanvasViewissä
+
+    ///////////////////////////////////////////////////////////////
+    // Muuteteaan ehdotusta nappuloilla aina setTimesta eteenpäin
+    // Ehdotuksen arvo togglaa 0,1,2
+    // Piirretään ehdotukseen mukaan canvasin on drawissa
+
+    ///////////////////////////////////////////////////////////////
+    // OK;lla kirjoitetaan eventti tietokantaan
+    // Vain jos ehdotus on != nykyinen
+
+
+
     companion object {
+
         var globalDpSet = 0f
 
         var globalTimeSet: Long = 10
@@ -164,5 +267,13 @@ class MainActivity : AppCompatActivity() {
 
         var timeToDp = 1f
         var dpToTime = 1f
+
+        var changeProposed=true
+
+        var proposedRelay = ""
+        var proposedStatus = ""
+        var propoStatus = 0
+        var propoY = 0f
     }
 }
+
