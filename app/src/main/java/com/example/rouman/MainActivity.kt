@@ -82,7 +82,7 @@ class MainActivity : AppCompatActivity() {
             c.invalidate()
         }
 
-        val button_confirm = findViewById<View>(R.id.button_confirm) as Button
+//        val button_confirm = findViewById<View>(R.id.button_confirm) as Button
         button_confirm.setOnClickListener {
 
             // Jos on tekstiä JA aika kalenterista on suurempi kuin systeemiaika
@@ -108,12 +108,13 @@ class MainActivity : AppCompatActivity() {
 
 //                        setAlarm(reminder.time!!, reminder.message)
 
-                    finish()
-
-                    toast("Change saved and alarm created")
+//                    finish()
+                    uiThread {
+                        toast("Change saved and alarm created")
+                    }
 
                 }
-                changeProposed = false
+//                changeProposed = false
             }
         }
     }
