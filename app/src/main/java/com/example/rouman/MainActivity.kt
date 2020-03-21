@@ -2,6 +2,7 @@ package com.example.rouman
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.pm.PackageManager
 import android.graphics.Canvas
 import android.icu.util.TimeZone
 import android.os.Bundle
@@ -9,19 +10,40 @@ import android.view.View
 import android.view.ViewTreeObserver
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import org.jetbrains.anko.internals.AnkoInternals.getContext
 import java.text.SimpleDateFormat
 import java.util.*
+import java.util.jar.Manifest
 import kotlin.time.milliseconds
 import android.widget.TextView as TextView1
 
 
 class MainActivity : AppCompatActivity() {
+    private val neededPermissions = arrayOf(android.Manifest.permission.SEND_SMS)
 
+    private fun checkPermissions() {
+        val permissionsToRequest = mutableListOf<String>()
+        for (permission in neededPermissions) {
+            if (ContextCompat.checkSelfPermission(
+                    applicationContext,
+                    permission
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                permissionsToRequest.add(permission)
+            }
+        }
+
+        if(permissionsToRequest.count()>0) {
+            ActivityCompat.requestPermissions(this, permissionsToRequest.toTypedArray(), 0)
+        }
+    }
     @SuppressLint("ResourceType")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        checkPermissions()
 
 /*
         val bu =
