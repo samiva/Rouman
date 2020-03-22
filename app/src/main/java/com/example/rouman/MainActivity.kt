@@ -61,34 +61,38 @@ class MainActivity : AppCompatActivity() {
         val button_plat = findViewById<View>(R.id.button12) as Button
         button_plat.setOnClickListener {
             propoStatus += 1
-            if (propoStatus == 4)
+            if (propoStatus == 4) {
                 propoStatus = 0
-
+                changeProposed=false
+            }
             propoY = button_plat.getTop().toFloat()
             if (propoStatus == 1) {
                 proposedRelay = "PLAT"
                 proposedStatus = "1"
+                changeProposed=true
             }
-            if (propoStatus == 1) {
+            if (propoStatus == 2) {
                 proposedRelay = "PLAT"
                 proposedStatus = "2"
+                changeProposed=true
 
             }
-            if (propoStatus == 1) {
+            if (propoStatus == 3) {
                 proposedRelay = "PLAT"
                 proposedStatus = "3"
+                changeProposed=true
             }
             val c = findViewById<View>(R.id.canvasView) as Canvass
             c.invalidate()
         }
 
-//        val button_confirm = findViewById<View>(R.id.button_confirm) as Button
+        val button_confirm = findViewById<View>(R.id.button_confirm) as Button
         button_confirm.setOnClickListener {
 
             // Jos on tekstiä JA aika kalenterista on suurempi kuin systeemiaika
              if (changeProposed) {
 
-                val controlEvent = ControlEvent(
+                val newEvent = ControlEvent(
                     uid = null,
                     time = globalTimeSet,
                     relay = proposedRelay,
@@ -103,18 +107,17 @@ class MainActivity : AppCompatActivity() {
                                 "control_events"
                             )
                             .build()
-                    db.controlEventDao().insert(controlEvent)
+                    db.controlEventDao().insert(newEvent)
                     db.close()
 
 //                        setAlarm(reminder.time!!, reminder.message)
 
-//                    finish()
-                    uiThread {
-                        toast("Change saved and alarm created")
-                    }
+                    //finish()
+
+                    toast("Change saved and alarm created")
 
                 }
-//                changeProposed = false
+                changeProposed = false
             }
         }
     }
@@ -238,12 +241,12 @@ class MainActivity : AppCompatActivity() {
 
         //////////////////////////////
         // Read database
-        refreshList()
+ //       refreshList()
     }
 
     private fun refreshList(){
         doAsync {
-            val db = Room.databaseBuilder(applicationContext, AppDatabase::class.java, "controlEvents").build()
+            val db = Room.databaseBuilder(applicationContext, AppDatabase::class.java, "control_events").build()
             val cEventList = db.controlEventDao().getControlEvents()
             db.close()
 
