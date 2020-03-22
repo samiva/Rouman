@@ -113,8 +113,9 @@ class MainActivity : AppCompatActivity() {
 //                        setAlarm(reminder.time!!, reminder.message)
 
                     //finish()
-
-                    toast("Change saved and alarm created")
+                    uiThread {
+                        toast("Change saved and alarm created")
+                    }
 
                 }
                 changeProposed = false
