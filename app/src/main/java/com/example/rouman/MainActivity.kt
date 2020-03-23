@@ -138,9 +138,7 @@ class MainActivity : AppCompatActivity() {
                 }
             }
 
-
-            // HMMM HOW HIS SHOULD BE DONE
-           if(currentEvent!!.setting == proposedStatus ) {
+           if(currentEvent?.setting == proposedStatus ) {
                toast("Same setting exists already")
            }
             else{
@@ -175,7 +173,7 @@ class MainActivity : AppCompatActivity() {
                      propoStatus = 0
 
                      refreshList()
-                     //onResume()
+
                      val c = findViewById<View>(R.id.canvasView) as Canvass
                      c.invalidate()
                 }
@@ -315,7 +313,8 @@ class MainActivity : AppCompatActivity() {
             // Pitäisi varmaan  tässä poistaa olemassaolevat ja luoda uudet remiderit muistiin?
             // setAlarm(reminder.time!!, reminder.message)
 
-
+            val c = findViewById<View>(R.id.canvasView) as Canvass
+            c.invalidate()
         }
     }
 
