@@ -1,33 +1,23 @@
 package com.example.rouman
 
 import android.annotation.SuppressLint
-import android.app.AlarmManager
-import android.app.PendingIntent
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Canvas
-import android.icu.util.TimeZone
 import android.os.Bundle
 import android.view.View
-import android.view.ViewTreeObserver
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.room.Room
+import kotlinx.android.synthetic.main.activity_list.*
 import org.jetbrains.anko.doAsync
-import org.jetbrains.anko.internals.AnkoInternals.getContext
 import org.jetbrains.anko.toast
-import org.jetbrains.anko.uiThread
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.time.milliseconds
-import android.widget.TextView as TextView1
 
 import kotlinx.android.synthetic.main.activity_main.*
-
-import androidx.room.Database
+import org.jetbrains.anko.uiThread
 
 class MainActivity : AppCompatActivity() {
     private val neededPermissions = arrayOf(android.Manifest.permission.SEND_SMS)
@@ -59,8 +49,10 @@ class MainActivity : AppCompatActivity() {
         }
 
         val button_plat = findViewById<View>(R.id.button12) as Button
+
         button_plat.setOnClickListener {
             propoStatus += 1
+            changeProposed = false
             if (propoStatus == 4) {
                 propoStatus = 0
                 changeProposed=false
@@ -86,15 +78,64 @@ class MainActivity : AppCompatActivity() {
             c.invalidate()
         }
 
+
+        /////////////////////////////////////////////////////////////////////////
+        // Luodaan OK buttonin toiminta
         val button_confirm = findViewById<View>(R.id.button_confirm) as Button
         button_confirm.setOnClickListener {
 
+            //////////////////////////////////////////////////////////////
+            // Mikä on seuraava, pitääkö poistaa
+            //var nextSetting = width.toFloat()
+            // cEvent sisältää kaikki eventit aikajärjestyksessä alkaen uusimmasta
+            var nextEventStatus = "0"
+            var nextEvent: ControlEvent? = null
+            var currentEvent: ControlEvent? = null
+            for(event in cEventList) {
+                if(event.relay == "PLAT") {
+                    if(timeSet<event.time!!) {
+                        //UID
+                        nextEventStatus = event.setting
+                        nextEvent = event
+                    }
+                    else{
+                        if(currentEvent != null)
+                            currentEvent = event
+                    }
+                }
+            }
+            /* HMMM HOW HIS SHOULD BE DONE
+            if(currentEvent.setting == proposedStatus ) {
+                toast("Same setting exists already")
+                finish()
+            }
+            */
+
+            ///////////////////////////////////////////
+            // Remove if re-setting - This cehcekd and works
+            if (nextEventStatus == proposedStatus){
+                doAsync {
+                    val db =
+                        Room.databaseBuilder(
+                                applicationContext,
+                                AppDatabase::class.java,
+                                "control_events"
+                            )
+                            .build()
+                    db.controlEventDao().deleteRowByData(
+                        time = nextEvent?.time,
+                        relay = nextEvent?.relay,
+                        setting =nextEvent?.setting)
+                    db.close()
+                }
+            }
+
             // Jos on tekstiä JA aika kalenterista on suurempi kuin systeemiaika
-             if (changeProposed) {
+            if (changeProposed && proposedRelay!="" && proposedStatus!="") {
 
                 val newEvent = ControlEvent(
                     uid = null,
-                    time = globalTimeSet,
+                    time = timeSet,
                     relay = proposedRelay,
                     setting = proposedStatus
                 )
@@ -110,15 +151,21 @@ class MainActivity : AppCompatActivity() {
                     db.controlEventDao().insert(newEvent)
                     db.close()
 
-//                        setAlarm(reminder.time!!, reminder.message)
+    //                        setAlarm(reminder.time!!, reminder.message)
 
-                    //finish()
-                    uiThread {
-                        toast("Change saved and alarm created")
-                    }
+                    toast("Change saved and alarm created")
 
                 }
-                changeProposed = false
+
+                 changeProposed = false
+                 proposedRelay = ""
+                 proposedStatus = ""
+                 propoStatus = 0
+
+                 refreshList()
+
+                 val c = findViewById<View>(R.id.canvasView) as Canvass
+                 c.invalidate()
             }
         }
     }
@@ -242,28 +289,15 @@ class MainActivity : AppCompatActivity() {
 
         //////////////////////////////
         // Read database
- //       refreshList()
+        refreshList()
     }
 
     private fun refreshList(){
         doAsync {
             val db = Room.databaseBuilder(applicationContext, AppDatabase::class.java, "control_events").build()
-            val cEventList = db.controlEventDao().getControlEvents()
+            cEventList = db.controlEventDao().getControlEvents()
             db.close()
-
-// tätä voisi muokata jos haluaisi control eventit tekstimuodossa tai jossain muussa tyylissä näkyviin vaikka toiseen UI:hin
-/*
-            uiThread {
-                if (reminders.isNotEmpty()) {
-                    val adapter = ReminderAdapter(applicationContext, reminders )
-                    list1.adapter = adapter
-                } else {
-                    toast("No reminders")
-                }
-            }
-*/
         }
-
     }
 
     ///////////////////////////////////////////////////////////////
@@ -282,18 +316,22 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
 
-        var globalDpSet = 0f
+        var cEventList: List<ControlEvent> = emptyList()
 
-        var globalTimeSet: Long = 10
+        var timeSetDp = 0f
+        var timeSet: Long = 10
+
         var timeOnWeekStart: Long = 1
         var timeOnWeekEnd: Long = 1
+
         var curTime: Long =1
+        var curTimeDp: Float = 1f
         var deltaTime: Long = 578
 
         var timeToDp = 1f
         var dpToTime = 1f
 
-        var changeProposed=true
+        var changeProposed=false
 
         var proposedRelay = ""
         var proposedStatus = ""

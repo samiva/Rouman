@@ -15,6 +15,15 @@ interface ControlEventDao {
     @Transaction @Insert
     fun insert(controlEvent: ControlEvent)
 
-    @Query("SELECT * FROM control_events")
+    @Query("SELECT * FROM control_events s ORDER BY s.time DESC")
     fun getControlEvents(): List<ControlEvent>
+
+    @Query("DELETE FROM control_events WHERE time = :time AND relay = :relay AND setting = :setting")
+    fun deleteRowByData(time: Long?, relay: String?, setting: String? )
+
+    @Query("DELETE FROM control_events WHERE time > 0")
+    fun clearDb()
+
+    @Transaction  @Delete
+    fun delete(model: ControlEvent?)
 }
