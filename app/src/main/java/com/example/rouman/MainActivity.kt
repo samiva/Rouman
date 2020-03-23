@@ -84,7 +84,7 @@ class MainActivity : AppCompatActivity() {
             }
             if (propoStatus == 3) {
                 proposedRelay = "PLAT"
-                proposedStatus = "3"
+                proposedStatus = "0"
                 changeProposed=true
             }
             val c = findViewById<View>(R.id.canvasView) as Canvass
@@ -112,17 +112,12 @@ class MainActivity : AppCompatActivity() {
                         nextEvent = event
                     }
                     else{
-                        if(currentEvent != null)
+                        if(currentEvent == null)
                             currentEvent = event
                     }
                 }
             }
-            /* HMMM HOW HIS SHOULD BE DONE
-            if(currentEvent.setting == proposedStatus ) {
-                toast("Same setting exists already")
-                finish()
-            }
-            */
+
 
             ///////////////////////////////////////////
             // Remove if re-setting - This cehcekd and works
@@ -143,40 +138,47 @@ class MainActivity : AppCompatActivity() {
                 }
             }
 
-            // Jos on tekstiä JA aika kalenterista on suurempi kuin systeemiaika
-            if (changeProposed && proposedRelay!="" && proposedStatus!="") {
 
-                val newEvent = ControlEvent(
-                    uid = null,
-                    time = timeSet,
-                    relay = proposedRelay,
-                    setting = proposedStatus
-                )
+            // HMMM HOW HIS SHOULD BE DONE
+           if(currentEvent!!.setting == proposedStatus ) {
+               toast("Same setting exists already")
+           }
+            else{
+                // Jos on tekstiä JA aika kalenterista on suurempi kuin systeemiaika
+                if (changeProposed && proposedRelay!="" && proposedStatus!="") {
 
-                doAsync {
-                    val db =
-                        Room.databaseBuilder(
-                                applicationContext,
-                                AppDatabase::class.java,
-                                "control_events"
-                            )
-                            .build()
-                    db.controlEventDao().insert(newEvent)
-                    db.close()
+                    val newEvent = ControlEvent(
+                        uid = null,
+                        time = timeSet,
+                        relay = proposedRelay,
+                        setting = proposedStatus
+                    )
 
-                    toast("Change saved and alarm created")
+                    doAsync {
+                        val db =
+                            Room.databaseBuilder(
+                                    applicationContext,
+                                    AppDatabase::class.java,
+                                    "control_events"
+                                )
+                                .build()
+                        db.controlEventDao().insert(newEvent)
+                        db.close()
 
+                        toast("Change saved and alarm created")
+
+                    }
+
+                     changeProposed = false
+                     proposedRelay = ""
+                     proposedStatus = ""
+                     propoStatus = 0
+
+                     refreshList()
+                     //onResume()
+                     val c = findViewById<View>(R.id.canvasView) as Canvass
+                     c.invalidate()
                 }
-
-                 changeProposed = false
-                 proposedRelay = ""
-                 proposedStatus = ""
-                 propoStatus = 0
-
-                 refreshList()
-
-                 val c = findViewById<View>(R.id.canvasView) as Canvass
-                 c.invalidate()
             }
         }
     }
