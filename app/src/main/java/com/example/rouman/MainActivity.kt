@@ -19,6 +19,19 @@ import java.util.*
 import kotlinx.android.synthetic.main.activity_main.*
 import org.jetbrains.anko.uiThread
 
+///////////////////////////////////////////////////////////////
+// Piirretään tietokanta ruutuun, vaihtaen painttia CanvasViewissä
+
+///////////////////////////////////////////////////////////////
+// Muuteteaan ehdotusta nappuloilla aina setTimesta eteenpäin
+// Ehdotuksen arvo togglaa 0,1,2
+// Piirretään ehdotukseen mukaan canvasin on drawissa
+
+///////////////////////////////////////////////////////////////
+// OK;lla kirjoitetaan eventti tietokantaan
+// Vain jos ehdotus on != nykyinen && poistetaan seuraava jos turha uuden jälkeen
+
+
 class MainActivity : AppCompatActivity() {
     private val neededPermissions = arrayOf(android.Manifest.permission.SEND_SMS)
 
@@ -150,8 +163,6 @@ class MainActivity : AppCompatActivity() {
                             .build()
                     db.controlEventDao().insert(newEvent)
                     db.close()
-
-    //                        setAlarm(reminder.time!!, reminder.message)
 
                     toast("Change saved and alarm created")
 
@@ -297,20 +308,14 @@ class MainActivity : AppCompatActivity() {
             val db = Room.databaseBuilder(applicationContext, AppDatabase::class.java, "control_events").build()
             cEventList = db.controlEventDao().getControlEvents()
             db.close()
+
+            ///////////////////////////////////////////////////////////////////////////////////
+            // Pitäisi varmaan  tässä poistaa olemassaolevat ja luoda uudet remiderit muistiin?
+            // setAlarm(reminder.time!!, reminder.message)
+
+
         }
     }
-
-    ///////////////////////////////////////////////////////////////
-    // Piirretään tietokanta ruutuun, vaihtaen painttia CanvasViewissä
-
-    ///////////////////////////////////////////////////////////////
-    // Muuteteaan ehdotusta nappuloilla aina setTimesta eteenpäin
-    // Ehdotuksen arvo togglaa 0,1,2
-    // Piirretään ehdotukseen mukaan canvasin on drawissa
-
-    ///////////////////////////////////////////////////////////////
-    // OK;lla kirjoitetaan eventti tietokantaan
-    // Vain jos ehdotus on != nykyinen
 
 
 

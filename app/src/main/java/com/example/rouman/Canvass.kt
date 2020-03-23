@@ -34,8 +34,6 @@ class Canvass(context: Context, attrs: AttributeSet?) :
 
     private var mBitmap: Bitmap? = null
     private var mCanvas: Canvas? = null
-//    private val mPath: Path
-//    private val mPaint: Paint
     private var mX = 0f
     private var mY = 0f
 
@@ -85,7 +83,7 @@ class Canvass(context: Context, attrs: AttributeSet?) :
         if (b_plat != null){
 
             var endXTime = curTime + timeOnWeekEnd - timeOnWeekStart
-            var endX= endXTime / dpToTime //* timeToDp
+            var endX= endXTime / dpToTime
             endX =curTimeDp+width
 
             val plat_y  = b_plat.getTop().toFloat() // top.toFloat()
@@ -126,11 +124,8 @@ class Canvass(context: Context, attrs: AttributeSet?) :
                         endX = startX // Seuraavanloppu on tämän alku
                     }
 
-
-                    // If one after last "LAST" element?....piirrä curtimeDp ->
                 }
             }
-//            canvas.drawLine(startX, plat_y, endX, plat_y, paint)
         }
 
         /////////////////////////////////////////////////////////////
@@ -198,10 +193,6 @@ class Canvass(context: Context, attrs: AttributeSet?) :
 
     // when ACTION_DOWN start touch according to the x,y values
     private fun startTouch(x: Float, y: Float) {
-//        mPath.moveTo(x, y)
-//        mX = x
-//        mY = y
-
         timeSetDp = x
     }
 
@@ -262,17 +253,5 @@ class Canvass(context: Context, attrs: AttributeSet?) :
     }
 
     init {
-        // we set a new Path
-        //mPath = Path()
-
-        // and we set a new Paint with the desired attributes
-        /*
-        mPaint = Paint()
-        mPaint.isAntiAlias = true
-        mPaint.color = Color.BLACK
-        mPaint.style = Paint.Style.STROKE
-        mPaint.strokeJoin = Paint.Join.ROUND
-        mPaint.strokeWidth = 4f
-        */
     }
 }
