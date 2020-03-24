@@ -1,6 +1,13 @@
 package com.example.rouman
 
+//////////////////////////////////////////////////////////////////////////////////////////
+// Copyright Vesa Similä & Sami Varanka
+// spring 2020
+
 import android.annotation.SuppressLint
+import android.app.AlarmManager
+import android.app.PendingIntent
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
@@ -10,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.room.Room
+import com.example.rouman.MessageSender.Companion.sendMessageToController
 import kotlinx.android.synthetic.main.activity_list.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.toast
@@ -61,6 +69,13 @@ class MainActivity : AppCompatActivity() {
         button_list.setOnClickListener {
             val intent = Intent(applicationContext, ListActivity::class.java)
             startActivity(intent)
+        }
+
+        button_send_now.setOnClickListener{
+            toast("Nyt SMS pitäs lähteä testiviesti")
+
+            var msg = "Releasetukset: PLAT" + "= 0" + "/"
+            sendMessageToController(applicationContext, msg, "0505617080")
         }
 
         button12.setOnClickListener {
@@ -219,33 +234,6 @@ class MainActivity : AppCompatActivity() {
         canvasView.invalidate()
     }
 
-    private fun setAlarm(time: Long, controlEvent: ControlEvent){
-/*        val intent = Intent(this, ReminderReceiver::class.java)
-        intent.putExtra("message",message)
-        val pendingIntent = PendingIntent.getBroadcast(this, 1, intent, PendingIntent.FLAG_ONE_SHOT)
-        val manager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        manager.setExact(AlarmManager.RTC,time,pendingIntent)
-
-        runOnUiThread{toast("Reminder is created")}
-*/
-    }
-
-/*    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        menuInflater.inflate(R.menu.menu_main, menu)
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        return when (item.itemId) {
-            R.id.action_settings -> true
-            else -> super.onOptionsItemSelected(item)
-        }
-    }
-*/
 
 
     override fun onResume() {
@@ -341,6 +329,33 @@ class MainActivity : AppCompatActivity() {
         refreshList()
     }
 
+    private fun setAlarm(controlEvent: ControlEvent){
+        val intent = Intent(this, ReminderReceiver::class.java)
+        intent.putExtra("relay",controlEvent.relay)
+        intent.putExtra("setting",controlEvent.setting)
+
+        val pendingIntent = PendingIntent.getBroadcast(this, 1, intent, PendingIntent.FLAG_ONE_SHOT)
+        val manager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        manager.setExact(AlarmManager.RTC, controlEvent.time!!,pendingIntent)
+    }
+
+/*    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        menuInflater.inflate(R.menu.menu_main, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        return when (item.itemId) {
+            R.id.action_settings -> true
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+*/
+
     private fun refreshList(){
         doAsync {
 
@@ -352,8 +367,14 @@ class MainActivity : AppCompatActivity() {
             // Pitäisi varmaan  tässä poistaa olemassaolevat ja luoda uudet remiderit muistiin?
             // setAlarm(reminder.time!!, reminder.message)
 
+            uiThread {
+                for (event in cEventList) {
+                   setAlarm(event)
+                }
 
-            canvasView.invalidate()
+                canvasView.invalidate()
+                runOnUiThread{toast("Reminders are created")}
+            }
         }
     }
 

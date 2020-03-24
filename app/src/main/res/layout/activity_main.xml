@@ -13,7 +13,7 @@
         android:layout_height="0dp"
         android:text="MA"
         app:layout_constraintBottom_toTopOf="@+id/button12"
-        app:layout_constraintEnd_toStartOf="@+id/buttonTI"
+        app:layout_constraintEnd_toStartOf="@+id/button_confirm"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/text_timeSet"
         app:layout_constraintTop_toTopOf="parent" />
@@ -189,11 +189,10 @@
         android:id="@+id/button_confirm"
         android:layout_width="70dp"
         android:layout_height="47dp"
+        android:layout_marginEnd="56dp"
         android:text="OK"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/button_list"
-        app:layout_constraintHorizontal_bias="0.428"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/buttonR8"
         app:layout_constraintVertical_bias="0.444" />
 
@@ -208,6 +207,14 @@
         app:layout_constraintTop_toBottomOf="@+id/buttonTO"
         app:layout_constraintVertical_bias="1.0" />
 
+    <Button
+        android:id="@+id/button_send_now"
+        android:layout_width="112dp"
+        android:layout_height="45dp"
+        android:text="Send Now"
+        app:layout_constraintEnd_toStartOf="@+id/button_confirm"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/button_confirm" />
     <Button
         android:id="@+id/button_list"
         android:layout_width="wrap_content"

@@ -292,7 +292,7 @@ class Canvass(context: Context, attrs: AttributeSet?) :
     }
 
     companion object {
-        private const val TOLERANCE = 1f
+        private const val TOLERANCE = 10f
     }
 
     init {
