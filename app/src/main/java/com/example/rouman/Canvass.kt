@@ -25,6 +25,7 @@ import com.example.rouman.MainActivity.Companion.propoY
 import com.example.rouman.MainActivity.Companion.propoStatus
 import com.example.rouman.MainActivity.Companion.cEventList
 import com.example.rouman.MainActivity.Companion.curTimeDp
+import com.example.rouman.MainActivity.Companion.proposedRelay
 import kotlinx.android.synthetic.main.listview_item.view.*
 import java.text.SimpleDateFormat
 
@@ -73,122 +74,165 @@ class Canvass(context: Context, attrs: AttributeSet?) :
         paint.setStrokeWidth(4f)
 
         curTimeDp = (curTime-timeOnWeekStart) * timeToDp
-
         canvas.drawLine(curTimeDp, 0f, curTimeDp, height, paint)
-
 
         ////////////////////////////////////////////////////
         // Draw relay program line
-        val b_plat = getRootView().findViewById<Button>(R.id.button12)
-        if (b_plat != null){
-
-            var endXTime = curTime + timeOnWeekEnd - timeOnWeekStart
-            var endX= endXTime / dpToTime
-            endX =curTimeDp+width
-
-            val plat_y  = b_plat.getTop().toFloat() // top.toFloat()
-            var startX = 0f
-            for(event in cEventList) {
-                if(event.relay == "PLAT") {
-                    if (event.setting == "0")
-                        paint.setARGB(255, 0, 0, 0)
-                    if (event.setting == "1")
-                        paint.setARGB(255, 255, 0, 0)
-                    if (event.setting == "2")
-                        paint.setARGB(255, 0, 0, 255)
-                    paint.setStrokeWidth(14f)
-
-                    var eventTime = event.time!!.toLong()
-                    var startXTime = eventTime
-                    startX = (eventTime - timeOnWeekStart) * timeToDp
-
-                    if (startXTime < timeOnWeekEnd && endX > curTimeDp && endX <= width){ // Jos molemmat on välillä curtime - width
-                        if (startX < curTimeDp) {
-                            startX = curTimeDp // viimeinen voi alkaa ennen curtime
-                        }
-                        if (endX > curTimeDp) { // Piirretään vain jos loppupää on canvasin alueella
-                            canvas.drawLine(startX, plat_y, endX, plat_y, paint)
-                            endX = startX // Seuraavanloppu on tämän alku
-                        }
-                    }
-                    if (startXTime < timeOnWeekEnd  &&  endX>width) { // Eli jos on taitekohta pitää piirtää kahdessa välissä
-                        // Näitä pitäs olla vain yks
-                        canvas.drawLine(0f, plat_y, endX-width, plat_y, paint)
-                        endX = width.toFloat() // jatkopala loppuu canvasin oikeaan reunaan
-                        canvas.drawLine(startX, plat_y, width.toFloat(), plat_y, paint)
-                        endX = startX // Seuraava loppuu tähän
-                    }
-                    if (startXTime > timeOnWeekEnd && endX > width ) { // Jos on alku ja loppu width:n jälkeen, eli välillä 0-curtime
-                        startX = startX - width
-                        canvas.drawLine(startX, plat_y, endX-width, plat_y, paint)
-                        endX = startX // Seuraavanloppu on tämän alku
-                    }
-
-                }
-            }
-        }
+        drawProgram("PLAT", canvas)
+        drawProgram("VARV", canvas)
+        drawProgram("VARK", canvas)
+        drawProgram("VARO", canvas)
+        drawProgram("PUMP", canvas)
+        drawProgram("KVES", canvas)
+        drawProgram("R7",  canvas)
+        drawProgram("R8",  canvas)
 
         /////////////////////////////////////////////////////////////
         // Draw proposal
-        val b_varv = getRootView().findViewById<Button>(R.id.button13)
-        if (b_varv != null){
+        if(proposedRelay == "PLAT")
+            drawProposal(getRootView().findViewById<Button>(R.id.button12).top.toFloat(), canvas)
+        if(proposedRelay == "VARV")
+            drawProposal(getRootView().findViewById<Button>(R.id.button13).top.toFloat(), canvas)
+        if(proposedRelay == "VARK")
+            drawProposal(getRootView().findViewById<Button>(R.id.button14).top.toFloat(), canvas)
+        if(proposedRelay == "VARO")
+            drawProposal(getRootView().findViewById<Button>(R.id.button15).top.toFloat(), canvas)
+        if(proposedRelay == "PUMP")
+            drawProposal(getRootView().findViewById<Button>(R.id.button16).top.toFloat(), canvas)
+        if(proposedRelay == "KVES")
+            drawProposal(getRootView().findViewById<Button>(R.id.button17).top.toFloat(), canvas)
+        if(proposedRelay == "R7")
+            drawProposal(getRootView().findViewById<Button>(R.id.buttonR7).top.toFloat(), canvas)
+        if(proposedRelay == "R8")
+            drawProposal(getRootView().findViewById<Button>(R.id.buttonR8).top.toFloat(), canvas)
 
-            /////////////////////////////////////////////////////////7
-            // Endpoint for porposal
-            var propoEnd = curTimeDp + width
-            for(event in cEventList) {
-                if(event.relay == "PLAT") {
-                    if(timeSet<event.time!! ) // Etsitään asetettuun aikaan nähden seuraava eventti
-                        propoEnd = (event.time!! - timeOnWeekStart) * timeToDp
+    }
+
+    ////////////////////////////////////////////////////
+    // Draw relay program line
+    private fun drawProgram(relToDraw: String, canvas: Canvas){
+        var paint = Paint()
+        var plat_y: Float = 0f
+
+        if(relToDraw == "PLAT")
+            plat_y= getRootView().findViewById<Button>(R.id.button12).top.toFloat()
+        if(relToDraw == "VARV")
+            plat_y = getRootView().findViewById<Button>(R.id.button13).top.toFloat()
+        if(relToDraw == "VARK")
+            plat_y = getRootView().findViewById<Button>(R.id.button14).top.toFloat()
+        if(relToDraw == "VARO")
+            plat_y = getRootView().findViewById<Button>(R.id.button15).top.toFloat()
+        if(relToDraw == "PUMP")
+            plat_y = getRootView().findViewById<Button>(R.id.button16).top.toFloat()
+        if(relToDraw == "KVES")
+            plat_y = getRootView().findViewById<Button>(R.id.button17).top.toFloat()
+        if(relToDraw == "R7")
+            plat_y = getRootView().findViewById<Button>(R.id.buttonR7).top.toFloat()
+        if(relToDraw == "R8")
+            plat_y = getRootView().findViewById<Button>(R.id.buttonR8).top.toFloat()
+
+        var endXTime = curTime + timeOnWeekEnd - timeOnWeekStart
+        var endX= endXTime / dpToTime
+        endX =curTimeDp+width
+
+        var startX = 0f
+        for(event in cEventList.filter{r-> r.relay == relToDraw}) {
+            if (event.setting == "0")
+                paint.setARGB(255, 0, 0, 0)
+            if (event.setting == "1")
+                paint.setARGB(255, 255, 0, 0)
+            if (event.setting == "2")
+                paint.setARGB(255, 0, 0, 255)
+            paint.setStrokeWidth(14f)
+
+            var eventTime = event.time!!.toLong()
+            var startXTime = eventTime
+            startX = (eventTime - timeOnWeekStart) * timeToDp
+
+            if (startXTime < timeOnWeekEnd && endX > curTimeDp && endX <= width){ // Jos molemmat on välillä curtime - width
+                if (startX < curTimeDp) {
+                    startX = curTimeDp // viimeinen voi alkaa ennen curtime
+                }
+                if (endX > curTimeDp) { // Piirretään vain jos loppupää on canvasin alueella
+                    canvas.drawLine(startX, plat_y, endX, plat_y, paint)
+                    endX = startX // Seuraavanloppu on tämän alku
                 }
             }
-            //val plat_y  = b_varv.getTop().toFloat() // top.toFloat()
-            if(propoStatus != 0) {
-                if (propoStatus == 1)
-                    paint.setARGB(255, 255, 0, 0)
-                if (propoStatus == 2)
-                    paint.setARGB(255, 0, 0, 255)
-                if (propoStatus == 3)
-                    paint.setARGB(255, 0, 0, 0)
-                paint.setStrokeWidth(14f)
-
-                if(propoEnd <= timeOnWeekEnd* timeToDp && timeSetDp < curTimeDp) { // Molemmat curtimen vasemmalla puolella
-                    canvas.drawLine(
-                        timeSetDp.toFloat(),
-                        propoY + 14,
-                        propoEnd-width.toFloat(),
-                        propoY + 14,
-                        paint
-                    )
-                }
-                if(propoEnd > width && timeSetDp < width && timeSetDp > curTimeDp) { // Alkaa curtimen vasemmalta puolelta ja loppuu oikealle
-                    canvas.drawLine(
-                        0f,
-                        propoY + 14,
-                        propoEnd-width,
-                        propoY + 14,
-                        paint
-                    )
-                    canvas.drawLine(
-                        timeSetDp.toFloat(),
-                        propoY + 14,
-                        width.toFloat(),
-                        propoY + 14,
-                        paint
-                    )
-                }
-                if(propoEnd > curTimeDp && propoEnd <= width && timeSetDp < width && timeSetDp > curTimeDp) { // Alkaa ja loppuu curtimen oikealle puolelle
-                    canvas.drawLine(
-                        timeSetDp.toFloat(),
-                        propoY + 14,
-                        propoEnd,
-                        propoY + 14,
-                        paint
-                    )
-                }
-
+            if (startXTime < timeOnWeekEnd  &&  endX>width) { // Eli jos on taitekohta pitää piirtää kahdessa välissä
+                // Näitä pitäs olla vain yks
+                canvas.drawLine(0f, plat_y, endX-width, plat_y, paint)
+                endX = width.toFloat() // jatkopala loppuu canvasin oikeaan reunaan
+                canvas.drawLine(startX, plat_y, width.toFloat(), plat_y, paint)
+                endX = startX // Seuraava loppuu tähän
             }
+            if (startXTime > timeOnWeekEnd && endX > width ) { // Jos on alku ja loppu width:n jälkeen, eli välillä 0-curtime
+                startX = startX - width
+                canvas.drawLine(startX, plat_y, endX-width, plat_y, paint)
+                endX = startX // Seuraavanloppu on tämän alku
+            }
+
+
         }
+    }
+    private fun drawProposal(propoY: Float, canvas: Canvas){
+
+        val width = canvas.getWidth()
+        var paint = Paint()
+
+        /////////////////////////////////////////////////////////7
+        // Endpoint for proposal
+        var propoEnd = curTimeDp + width
+        for(event in cEventList.filter{r->r.relay == proposedRelay}) {
+            if(timeSet<event.time!! ) // Etsitään asetettuun aikaan nähden seuraava eventti
+                propoEnd = (event.time!! - timeOnWeekStart) * timeToDp
+        }
+
+        if(propoStatus != 0) {
+            if (propoStatus == 1)
+                paint.setARGB(255, 255, 0, 0)
+            if (propoStatus == 2)
+                paint.setARGB(255, 0, 0, 255)
+            if (propoStatus == 3)
+                paint.setARGB(255, 0, 0, 0)
+            paint.setStrokeWidth(14f)
+
+            if(propoEnd <= timeOnWeekEnd* timeToDp && timeSetDp < curTimeDp) { // Molemmat curtimen vasemmalla puolella
+                canvas.drawLine(
+                    timeSetDp.toFloat(),
+                    propoY + 14,
+                    propoEnd-width.toFloat(),
+                    propoY + 14,
+                    paint
+                )
+            }
+            if(propoEnd > width && timeSetDp < width && timeSetDp > curTimeDp) { // Alkaa curtimen vasemmalta puolelta ja loppuu oikealle
+                canvas.drawLine(
+                    0f,
+                    propoY + 14,
+                    propoEnd-width,
+                    propoY + 14,
+                    paint
+                )
+                canvas.drawLine(
+                    timeSetDp.toFloat(),
+                    propoY + 14,
+                    width.toFloat(),
+                    propoY + 14,
+                    paint
+                )
+            }
+            if(propoEnd > curTimeDp && propoEnd <= width && timeSetDp < width && timeSetDp > curTimeDp) { // Alkaa ja loppuu curtimen oikealle puolelle
+                canvas.drawLine(
+                    timeSetDp.toFloat(),
+                    propoY + 14,
+                    propoEnd,
+                    propoY + 14,
+                    paint
+                )
+            }
+
+        }
+
     }
 
     // when ACTION_DOWN start touch according to the x,y values
@@ -218,7 +262,6 @@ class Canvass(context: Context, attrs: AttributeSet?) :
     }
 
     fun clearCanvas() {
-        //mPath.reset()
         invalidate()
     }
 

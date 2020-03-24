@@ -17,6 +17,8 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.listview_item.*
+import kotlinx.android.synthetic.main.listview_item.view.*
 import org.jetbrains.anko.uiThread
 
 ///////////////////////////////////////////////////////////////
@@ -61,35 +63,47 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        val button_plat = findViewById<View>(R.id.button12) as Button
-
-        button_plat.setOnClickListener {
-            propoStatus += 1
-            changeProposed = false
-            if (propoStatus == 4) {
-                propoStatus = 0
-                changeProposed=false
-            }
-            propoY = button_plat.getTop().toFloat()
-            if (propoStatus == 1) {
-                proposedRelay = "PLAT"
-                proposedStatus = "1"
-                changeProposed=true
-            }
-            if (propoStatus == 2) {
-                proposedRelay = "PLAT"
-                proposedStatus = "2"
-                changeProposed=true
-
-            }
-            if (propoStatus == 3) {
-                proposedRelay = "PLAT"
-                proposedStatus = "0"
-                changeProposed=true
-            }
-            val c = findViewById<View>(R.id.canvasView) as Canvass
-            c.invalidate()
+        button12.setOnClickListener {
+            proposedRelay = "PLAT"
+            propoY = button12.getTop().toFloat()
+            stepPropoStatus()
         }
+        button13.setOnClickListener {
+            proposedRelay = "VARV"
+            propoY = button13.getTop().toFloat()
+            stepPropoStatus()
+        }
+        button14.setOnClickListener {
+            proposedRelay = "VARK"
+            propoY = button14.getTop().toFloat()
+            stepPropoStatus()
+        }
+        button15.setOnClickListener {
+            proposedRelay = "VARO"
+            propoY = button15.getTop().toFloat()
+            stepPropoStatus()
+        }
+        button16.setOnClickListener {
+            proposedRelay = "PUMP"
+            propoY = button16.getTop().toFloat()
+            stepPropoStatus()
+        }
+        button17.setOnClickListener {
+            proposedRelay = "KVES"
+            propoY = button13.getTop().toFloat()
+            stepPropoStatus()
+        }
+        buttonR7.setOnClickListener {
+            proposedRelay = "R7"
+            propoY = buttonR7.getTop().toFloat()
+            stepPropoStatus()
+        }
+        buttonR8.setOnClickListener {
+            proposedRelay = "R8"
+            propoY = buttonR8.getTop().toFloat()
+            stepPropoStatus()
+        }
+
 
 
         /////////////////////////////////////////////////////////////////////////
@@ -99,29 +113,25 @@ class MainActivity : AppCompatActivity() {
 
             //////////////////////////////////////////////////////////////
             // Mikä on seuraava, pitääkö poistaa
-            //var nextSetting = width.toFloat()
             // cEvent sisältää kaikki eventit aikajärjestyksessä alkaen uusimmasta
-            var nextEventStatus = "0"
             var nextEvent: ControlEvent? = null
             var currentEvent: ControlEvent? = null
-            for(event in cEventList) {
-                if(event.relay == "PLAT") {
+            for(event in cEventList.filter{ r -> r.relay == proposedRelay}) {
+//                if(event.relay == "PLAT") {
                     if(timeSet<event.time!!) {
                         //UID
-                        nextEventStatus = event.setting
                         nextEvent = event
                     }
                     else{
                         if(currentEvent == null)
                             currentEvent = event
                     }
-                }
+//                }
             }
 
-
             ///////////////////////////////////////////
-            // Remove if re-setting - This cehcekd and works
-            if (nextEventStatus == proposedStatus){
+            // Remove if re-setting
+            if (nextEvent?.setting == proposedStatus){
                 doAsync {
                     val db =
                         Room.databaseBuilder(
@@ -138,9 +148,11 @@ class MainActivity : AppCompatActivity() {
                 }
             }
 
-           if(currentEvent?.setting == proposedStatus ) {
-               toast("Same setting exists already")
-           }
+            //////////////////////////////////////////////
+            // If current setting is same do not save new
+            if(currentEvent?.setting == proposedStatus ) {
+                toast("Same setting exists already")
+            }
             else{
                 // Jos on tekstiä JA aika kalenterista on suurempi kuin systeemiaika
                 if (changeProposed && proposedRelay!="" && proposedStatus!="") {
@@ -164,7 +176,6 @@ class MainActivity : AppCompatActivity() {
                         db.close()
 
                         toast("Change saved and alarm created")
-
                     }
 
                      changeProposed = false
@@ -174,11 +185,38 @@ class MainActivity : AppCompatActivity() {
 
                      refreshList()
 
-                     val c = findViewById<View>(R.id.canvasView) as Canvass
-                     c.invalidate()
+                    canvasView.invalidate()
+
+                    val intent = Intent(applicationContext, MainActivity::class.java)
+                    startActivity(intent)
                 }
             }
         }
+    }
+
+    private fun stepPropoStatus(){
+        propoStatus += 1
+        changeProposed = false
+        if (propoStatus == 4) {
+            propoStatus = 0
+            proposedStatus = ""
+            changeProposed=false
+        }
+        if (propoStatus == 1) {
+            proposedStatus = "1"
+            changeProposed=true
+        }
+        if (propoStatus == 2) {
+            proposedStatus = "2"
+            changeProposed=true
+
+        }
+        if (propoStatus == 3) {
+            proposedStatus = "0"
+            changeProposed=true
+        }
+//        val c = findViewById<View>(R.id.canvasView) as Canvass
+        canvasView.invalidate()
     }
 
     private fun setAlarm(time: Long, controlEvent: ControlEvent){
@@ -305,6 +343,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun refreshList(){
         doAsync {
+
             val db = Room.databaseBuilder(applicationContext, AppDatabase::class.java, "control_events").build()
             cEventList = db.controlEventDao().getControlEvents()
             db.close()
@@ -313,8 +352,8 @@ class MainActivity : AppCompatActivity() {
             // Pitäisi varmaan  tässä poistaa olemassaolevat ja luoda uudet remiderit muistiin?
             // setAlarm(reminder.time!!, reminder.message)
 
-            val c = findViewById<View>(R.id.canvasView) as Canvass
-            c.invalidate()
+
+            canvasView.invalidate()
         }
     }
 
