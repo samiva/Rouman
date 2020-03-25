@@ -113,23 +113,27 @@ class Canvass(context: Context, attrs: AttributeSet?) :
     private fun drawProgram(relToDraw: String, canvas: Canvas){
         var paint = Paint()
         var plat_y: Float = 0f
+        val a=40
 
+        var h = getRootView().findViewById<Button>(R.id.buttonMA).height.toFloat()
         if(relToDraw == "PLAT")
-            plat_y= getRootView().findViewById<Button>(R.id.button12).top.toFloat()
+            plat_y= getRootView().findViewById<Button>(R.id.button12).top.toFloat()-h +a
         if(relToDraw == "VARV")
-            plat_y = getRootView().findViewById<Button>(R.id.button13).top.toFloat()
+            plat_y = getRootView().findViewById<Button>(R.id.button13).top.toFloat()-h+a
         if(relToDraw == "VARK")
-            plat_y = getRootView().findViewById<Button>(R.id.button14).top.toFloat()
+            plat_y = getRootView().findViewById<Button>(R.id.button14).top.toFloat()-h+a
         if(relToDraw == "VARO")
-            plat_y = getRootView().findViewById<Button>(R.id.button15).top.toFloat()
+            plat_y = getRootView().findViewById<Button>(R.id.button15).top.toFloat()-h+a
         if(relToDraw == "PUMP")
-            plat_y = getRootView().findViewById<Button>(R.id.button16).top.toFloat()
+            plat_y = getRootView().findViewById<Button>(R.id.button16).top.toFloat()-h+a
         if(relToDraw == "KVES")
-            plat_y = getRootView().findViewById<Button>(R.id.button17).top.toFloat()
+            plat_y = getRootView().findViewById<Button>(R.id.button17).top.toFloat()-h+a
         if(relToDraw == "R7")
-            plat_y = getRootView().findViewById<Button>(R.id.buttonR7).top.toFloat()
+            plat_y = getRootView().findViewById<Button>(R.id.buttonR7).top.toFloat()-h+a
         if(relToDraw == "R8")
-            plat_y = getRootView().findViewById<Button>(R.id.buttonR8).top.toFloat()
+            plat_y = getRootView().findViewById<Button>(R.id.buttonR8).top.toFloat()-h+a
+
+
 
         var endXTime = curTime + timeOnWeekEnd - timeOnWeekStart
         var endX= endXTime / dpToTime
