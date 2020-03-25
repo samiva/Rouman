@@ -166,8 +166,7 @@ class Canvass(context: Context, attrs: AttributeSet?) :
                 endX = startX // Seuraava loppuu tähän
             }
             if (startXTime > timeOnWeekEnd && endX > width ) { // Jos on alku ja loppu width:n jälkeen, eli välillä 0-curtime
-                startX = startX - width
-                canvas.drawLine(startX, plat_y, endX-width, plat_y, paint)
+                canvas.drawLine(startX-width, plat_y, endX-width, plat_y, paint)
                 endX = startX // Seuraavanloppu on tämän alku
             }
 

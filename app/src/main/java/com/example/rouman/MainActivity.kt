@@ -106,7 +106,7 @@ class MainActivity : AppCompatActivity() {
         }
         button17.setOnClickListener {
             proposedRelay = "KVES"
-            propoY = button13.getTop().toFloat()
+            propoY = button17.getTop().toFloat()
             stepPropoStatus()
         }
         buttonR7.setOnClickListener {
@@ -147,39 +147,8 @@ class MainActivity : AppCompatActivity() {
 
             ///////////////////////////////////////////
             // Remove if re-setting
-            if (nextEvent?.setting == proposedStatus){
-                doAsync {
-                    val db =
-                        Room.databaseBuilder(
-                                applicationContext,
-                                AppDatabase::class.java,
-                                "control_events"
-                            )
-                            .build()
-                    db.controlEventDao().deleteRowByData(
-                        time = nextEvent?.time,
-                        relay = nextEvent?.relay,
-                        setting =nextEvent?.setting)
-                    db.close()
-                }
-            }
-
-            //////////////////////////////////////////////
-            // If current setting is same do not save new
-            if(currentEvent?.setting == proposedStatus ) {
-                toast("Same setting exists already")
-            }
-            else{
-                // Jos on tekstiä JA aika kalenterista on suurempi kuin systeemiaika
-                if (changeProposed && proposedRelay!="" && proposedStatus!="") {
-
-                    val newEvent = ControlEvent(
-                        uid = null,
-                        time = timeSet,
-                        relay = proposedRelay,
-                        setting = proposedStatus
-                    )
-
+            if(nextEvent!=null) {
+                if (nextEvent!!.setting == proposedStatus) {
                     doAsync {
                         val db =
                             Room.databaseBuilder(
@@ -188,23 +157,58 @@ class MainActivity : AppCompatActivity() {
                                     "control_events"
                                 )
                                 .build()
-                        db.controlEventDao().insert(newEvent)
+                        db.controlEventDao().deleteRowByData(
+                            time = nextEvent!!.time,
+                            relay = nextEvent!!.relay,
+                            setting = nextEvent!!.setting
+                        )
                         db.close()
-
-                        toast("Change saved and alarm created")
                     }
+                }
+            }
 
-                     changeProposed = false
-                     proposedRelay = ""
-                     proposedStatus = ""
-                     propoStatus = 0
+            //////////////////////////////////////////////
+            // If current setting is same do not save new
+            if (currentEvent != null) {
+                if (currentEvent!!.setting == proposedStatus) {
+                    toast("Same setting exists already")
+                } else {
+                    // Jos on tekstiä JA aika kalenterista on suurempi kuin systeemiaika
+                    if (changeProposed && proposedRelay != "" && proposedStatus != "") {
 
-                     refreshList()
+                        val newEvent = ControlEvent(
+                            uid = null,
+                            time = timeSet,
+                            relay = proposedRelay,
+                            setting = proposedStatus
+                        )
 
-                    canvasView.invalidate()
+                        doAsync {
+                            val db =
+                                Room.databaseBuilder(
+                                        applicationContext,
+                                        AppDatabase::class.java,
+                                        "control_events"
+                                    )
+                                    .build()
+                            db.controlEventDao().insert(newEvent)
+                            db.close()
 
-                    val intent = Intent(applicationContext, MainActivity::class.java)
-                    startActivity(intent)
+                            toast("Change saved and alarm created")
+                        }
+
+                        changeProposed = false
+                        proposedRelay = ""
+                        proposedStatus = ""
+                        propoStatus = 0
+
+                        refreshList()
+
+                        canvasView.invalidate()
+
+                        val intent = Intent(applicationContext, MainActivity::class.java)
+                        startActivity(intent)
+                    }
                 }
             }
         }
