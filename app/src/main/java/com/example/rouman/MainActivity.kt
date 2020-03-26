@@ -169,8 +169,8 @@ class MainActivity : AppCompatActivity() {
 
             //////////////////////////////////////////////
             // If current setting is same do not save new
-            if (currentEvent != null) {
-                if (currentEvent!!.setting == proposedStatus) {
+//            if (currentEvent != null) {
+                if (currentEvent?.setting == proposedStatus) {
                     toast("Same setting exists already")
                 } else {
                     // Jos on tekstiä JA aika kalenterista on suurempi kuin systeemiaika
@@ -210,7 +210,7 @@ class MainActivity : AppCompatActivity() {
                         startActivity(intent)
                     }
                 }
-            }
+  //          }
         }
     }
 
@@ -341,7 +341,7 @@ class MainActivity : AppCompatActivity() {
 
         val pendingIntent = PendingIntent.getBroadcast(this, 1, intent, PendingIntent.FLAG_ONE_SHOT)
         val manager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        manager.setExact(AlarmManager.RTC, controlEvent.time!!,pendingIntent)
+        manager.setExact(AlarmManager.RTC_WAKEUP, controlEvent.time!!,pendingIntent)
     }
 
 /*    override fun onCreateOptionsMenu(menu: Menu): Boolean {
