@@ -345,9 +345,9 @@ class MainActivity : AppCompatActivity() {
         val manager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
         manager.setExact(AlarmManager.RTC_WAKEUP, futureTime!!,pendingIntent)
 
-        var aInfo = manager.getNextAlarmClock()
-        val sdf = SimpleDateFormat("HH:mm dd")
-        var timeText = sdf.format(aInfo.triggerTime)
+//        var aInfo = manager.getNextAlarmClock()
+//        val sdf = SimpleDateFormat("HH:mm dd")
+//        var timeText = sdf.format(aInfo.triggerTime)
 
     }
 
@@ -381,7 +381,8 @@ class MainActivity : AppCompatActivity() {
 
             uiThread {
                 for (event in cEventList) {
-                   setAlarm(event)
+                    if( curTime < event.time!!)
+                        setAlarm(event)
                 }
 
                 canvasView.invalidate()

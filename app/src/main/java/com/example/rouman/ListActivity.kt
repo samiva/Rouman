@@ -55,14 +55,14 @@ class ListActivity : AppCompatActivity() {
                     toast("No control events")
                 }
             }
-
+/*
             //val button_clear = findViewById<View>(R.id.button_clear) as Button
             val manager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
             var aInfo = manager.getNextAlarmClock()
             val sdf = SimpleDateFormat("HH:mm dd")
             var timeText = sdf.format(aInfo.triggerTime)
             text_next_alarm.text=timeText
-        }
+*/        }
     }
 
 }
