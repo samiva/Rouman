@@ -10,7 +10,10 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.icu.util.Calendar
+import android.icu.util.TimeZone
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
@@ -28,8 +31,10 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.listview_item.*
 import kotlinx.android.synthetic.main.listview_item.view.*
 import org.jetbrains.anko.uiThread
+import java.sql.Time
 import java.time.LocalDateTime
 import java.time.LocalTime
+import java.time.ZoneId
 
 ///////////////////////////////////////////////////////////////
 // Piirretään tietokanta ruutuun, vaihtaen painttia CanvasViewissä
@@ -338,11 +343,16 @@ class MainActivity : AppCompatActivity() {
         val intent = Intent(this, ReminderReceiver::class.java)
         intent.putExtra("relay",controlEvent.relay)
         intent.putExtra("setting",controlEvent.setting)
-        val currentTime = System.currentTimeMillis()
-        val futureTime = currentTime+10000 // ten seconds in future
+        val calendar = android.icu.util.GregorianCalendar(TimeZone.getTimeZone("GMT+2"))
+
+        Log.d("vittu", calendar.timeZone.toString())
+        calendar.add(Calendar.SECOND, 10)
+        val futureTime = calendar.timeInMillis // ten seconds in future
         val pendingIntent = PendingIntent.getBroadcast(this, 1, intent, PendingIntent.FLAG_ONE_SHOT)
         val manager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
         manager.setExact(AlarmManager.RTC_WAKEUP, futureTime,pendingIntent)
+
+       Log.d("Vittu", calendar.get(Calendar.HOUR_OF_DAY).toString())
     }
 
 /*    override fun onCreateOptionsMenu(menu: Menu): Boolean {
