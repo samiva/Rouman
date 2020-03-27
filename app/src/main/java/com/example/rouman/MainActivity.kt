@@ -139,10 +139,13 @@ class MainActivity : AppCompatActivity() {
             // cEvent sisältää kaikki eventit aikajärjestyksessä alkaen uusimmasta
             var nextEvent: ControlEvent? = null
             var currentEvent: ControlEvent? = null
+            var sameTimeEvent: ControlEvent? = null
             for(event in cEventList.filter{ r -> r.relay == proposedRelay}) {
-                if(timeSet<=event.time!!) {
-                    //UID
+                if(timeSet<event.time!!) {
                     nextEvent = event
+                }
+                if(timeSet==event.time!!) {
+                    sameTimeEvent = event
                 }
                 if (timeSet>event.time!!){
                     if(currentEvent == null)
@@ -153,7 +156,7 @@ class MainActivity : AppCompatActivity() {
             ///////////////////////////////////////////
             // Remove if re-setting
             if(nextEvent!=null) {
-                if (nextEvent!!.setting == proposedStatus || nextEvent.time == timeSet) {
+                if (nextEvent!!.setting == proposedStatus) {
                     doAsync {
                         val db =
                             Room.databaseBuilder(
@@ -172,12 +175,34 @@ class MainActivity : AppCompatActivity() {
                 }
             }
 
+            ///////////////////////////////////////////
+            // Remove if same Time span
+            if(sameTimeEvent!=null) {
+ //               if (nextEvent!!.setting != proposedStatus) { // Samaan aikaan ja eriväri
+                    doAsync {
+                        val db =
+                            Room.databaseBuilder(
+                                    applicationContext,
+                                    AppDatabase::class.java,
+                                    "control_events"
+                                )
+                                .build()
+                        db.controlEventDao().deleteRowByData(
+                            time = sameTimeEvent!!.time,
+                            relay = sameTimeEvent!!.relay,
+                            setting = sameTimeEvent!!.setting
+                        )
+                        db.close()
+                    }
+  //              }
+            }
+
             //////////////////////////////////////////////
-            // If current setting is same do not save new
-//            if (currentEvent != null) {
-                if (currentEvent?.setting == proposedStatus) {
-                    toast("Same setting exists already")
-                } else {
+            //
+           // if (currentEvent != null) {
+    //            if (currentEvent?.setting == proposedStatus) {
+      //              toast("Same setting exists already")
+      //          } else {
                     // Jos on tekstiä JA aika kalenterista on suurempi kuin systeemiaika
                     if (changeProposed && proposedRelay != "" && proposedStatus != "") {
 
@@ -214,8 +239,8 @@ class MainActivity : AppCompatActivity() {
                         val intent = Intent(applicationContext, MainActivity::class.java)
                         startActivity(intent)
                     }
-                }
-  //          }
+        //        }
+            //}
         }
     }
 
@@ -269,13 +294,13 @@ class MainActivity : AppCompatActivity() {
         var sdf_h = SimpleDateFormat("HH")
         var sdf_m = SimpleDateFormat("mm")
 
-
+/*
         sdf_year.timeZone = tz
         sdf_month.timeZone = tz
         sdf_day.timeZone = tz
         sdf_h.timeZone = tz
         sdf_m.timeZone = tz
-
+*/
         val year = sdf_year.format(syTime).toInt()
         val month = sdf_month.format(syTime).toInt()
         val day = sdf_day.format(syTime).toInt()
@@ -286,8 +311,8 @@ class MainActivity : AppCompatActivity() {
         ////////////////////////////////////////////////////////////
         // KORJAA !!  KUN KUUKAUSI VAIHTUU kesken viikon
         ////////////////////////////////////////////////////////////
-
-        var calendar = GregorianCalendar(
+// var
+        calendar = GregorianCalendar(
             year,
             month,
             day - dayNumber + 1,
@@ -343,16 +368,18 @@ class MainActivity : AppCompatActivity() {
         val intent = Intent(this, ReminderReceiver::class.java)
         intent.putExtra("relay",controlEvent.relay)
         intent.putExtra("setting",controlEvent.setting)
-        val calendar = android.icu.util.GregorianCalendar(TimeZone.getTimeZone("GMT+2"))
-
-        Log.d("vittu", calendar.timeZone.toString())
-        calendar.add(Calendar.SECOND, 10)
-        val futureTime = calendar.timeInMillis // ten seconds in future
+        val currentTime = System.currentTimeMillis()
+        var delta = calendar.timeInMillis - System.currentTimeMillis()
+        val futureTime = controlEvent.time!! - delta
         val pendingIntent = PendingIntent.getBroadcast(this, 1, intent, PendingIntent.FLAG_ONE_SHOT)
         val manager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        manager.setExact(AlarmManager.RTC_WAKEUP, futureTime,pendingIntent)
+        manager.setExact(AlarmManager.RTC_WAKEUP, futureTime!!,pendingIntent)
 
-       Log.d("Vittu", calendar.get(Calendar.HOUR_OF_DAY).toString())
+//        var aInfo = manager.getNextAlarmClock()
+//        val sdf = SimpleDateFormat("HH:mm dd")
+//        var timeText = sdf.format(aInfo.triggerTime)
+
+>>>>>>> upstream/master
     }
 
 /*    override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -385,11 +412,12 @@ class MainActivity : AppCompatActivity() {
 
             uiThread {
                 for (event in cEventList) {
-                   setAlarm(event)
+                    if( curTime < event.time!!)
+                        setAlarm(event)
                 }
 
                 canvasView.invalidate()
-                runOnUiThread{toast("Reminders are created")}
+                runOnUiThread{toast("Reminders are created if they were any")}
             }
         }
     }
@@ -397,7 +425,7 @@ class MainActivity : AppCompatActivity() {
 
 
     companion object {
-
+        var calendar = GregorianCalendar()
         var cEventList: List<ControlEvent> = emptyList()
 
         var timeSetDp = 0f

@@ -245,9 +245,6 @@ class Canvass(context: Context, attrs: AttributeSet?) :
 
     // when ACTION_MOVE move touch according to the x,y values
     private fun moveTouch(x: Float, y: Float) {
-        val dx = Math.abs(x - mX)
-        val dy = Math.abs(y - mY)
-        if (dx >= TOLERANCE || dy >= TOLERANCE) {
             // Need to check later if tolerance can be used to improve usaiblity in slow motion
             timeSetDp=x.toFloat()
             val oneWeek = timeOnWeekEnd - timeOnWeekStart
@@ -261,7 +258,6 @@ class Canvass(context: Context, attrs: AttributeSet?) :
             val tv = getRootView().findViewById<TextView>(R.id.text_timeSet)
             if (tv != null)
             {tv.text=set}
-        }
     }
 
     fun clearCanvas() {

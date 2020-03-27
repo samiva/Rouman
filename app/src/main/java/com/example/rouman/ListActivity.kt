@@ -1,5 +1,8 @@
 package com.example.rouman
 
+import android.app.AlarmManager
+import android.content.Context
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -10,7 +13,9 @@ import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.toast
 import org.jetbrains.anko.uiThread
 import com.example.rouman.MainActivity.Companion.cEventList
+import com.example.rouman.MainActivity.Companion.timeSet
 import kotlinx.android.synthetic.main.activity_main.*
+import java.text.SimpleDateFormat
 
 class ListActivity : AppCompatActivity() {
 
@@ -30,10 +35,12 @@ class ListActivity : AppCompatActivity() {
                 db.controlEventDao().clearDb()
                 db.close()
 
-                onResume()
+                val intent = Intent(applicationContext, ListActivity::class.java)
+                startActivity(intent)
             }
         }
     }
+
     override fun onResume(){
         super.onResume()
 
@@ -50,7 +57,14 @@ class ListActivity : AppCompatActivity() {
                     toast("No control events")
                 }
             }
-
-        }
+/*
+            //val button_clear = findViewById<View>(R.id.button_clear) as Button
+            val manager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+            var aInfo = manager.getNextAlarmClock()
+            val sdf = SimpleDateFormat("HH:mm dd")
+            var timeText = sdf.format(aInfo.triggerTime)
+            text_next_alarm.text=timeText
+*/        }
     }
+
 }
