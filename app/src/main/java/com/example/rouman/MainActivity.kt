@@ -135,22 +135,20 @@ class MainActivity : AppCompatActivity() {
             var nextEvent: ControlEvent? = null
             var currentEvent: ControlEvent? = null
             for(event in cEventList.filter{ r -> r.relay == proposedRelay}) {
-//                if(event.relay == "PLAT") {
-                    if(timeSet<event.time!!) {
-                        //UID
-                        nextEvent = event
-                    }
-                    else{
-                        if(currentEvent == null)
-                            currentEvent = event
-                    }
-//                }
+                if(timeSet<=event.time!!) {
+                    //UID
+                    nextEvent = event
+                }
+                if (timeSet>event.time!!){
+                    if(currentEvent == null)
+                        currentEvent = event
+                }
             }
 
             ///////////////////////////////////////////
             // Remove if re-setting
             if(nextEvent!=null) {
-                if (nextEvent!!.setting == proposedStatus) {
+                if (nextEvent!!.setting == proposedStatus || nextEvent.time == timeSet) {
                     doAsync {
                         val db =
                             Room.databaseBuilder(

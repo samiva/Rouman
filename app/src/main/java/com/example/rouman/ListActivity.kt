@@ -10,6 +10,7 @@ import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.toast
 import org.jetbrains.anko.uiThread
 import com.example.rouman.MainActivity.Companion.cEventList
+import kotlinx.android.synthetic.main.activity_main.*
 
 class ListActivity : AppCompatActivity() {
 
@@ -28,6 +29,8 @@ class ListActivity : AppCompatActivity() {
                 ).build()
                 db.controlEventDao().clearDb()
                 db.close()
+
+                onResume()
             }
         }
     }
