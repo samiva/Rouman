@@ -134,10 +134,13 @@ class MainActivity : AppCompatActivity() {
             // cEvent sisältää kaikki eventit aikajärjestyksessä alkaen uusimmasta
             var nextEvent: ControlEvent? = null
             var currentEvent: ControlEvent? = null
+            var sameTimeEvent: ControlEvent? = null
             for(event in cEventList.filter{ r -> r.relay == proposedRelay}) {
-                if(timeSet<=event.time!!) {
-                    //UID
+                if(timeSet<event.time!!) {
                     nextEvent = event
+                }
+                if(timeSet==event.time!!) {
+                    sameTimeEvent = event
                 }
                 if (timeSet>event.time!!){
                     if(currentEvent == null)
@@ -148,7 +151,7 @@ class MainActivity : AppCompatActivity() {
             ///////////////////////////////////////////
             // Remove if re-setting
             if(nextEvent!=null) {
-                if (nextEvent!!.setting == proposedStatus || nextEvent.time == timeSet) {
+                if (nextEvent!!.setting == proposedStatus) {
                     doAsync {
                         val db =
                             Room.databaseBuilder(
@@ -167,12 +170,34 @@ class MainActivity : AppCompatActivity() {
                 }
             }
 
+            ///////////////////////////////////////////
+            // Remove if same Time span
+            if(sameTimeEvent!=null) {
+ //               if (nextEvent!!.setting != proposedStatus) { // Samaan aikaan ja eriväri
+                    doAsync {
+                        val db =
+                            Room.databaseBuilder(
+                                    applicationContext,
+                                    AppDatabase::class.java,
+                                    "control_events"
+                                )
+                                .build()
+                        db.controlEventDao().deleteRowByData(
+                            time = sameTimeEvent!!.time,
+                            relay = sameTimeEvent!!.relay,
+                            setting = sameTimeEvent!!.setting
+                        )
+                        db.close()
+                    }
+  //              }
+            }
+
             //////////////////////////////////////////////
-            // If current setting is same do not save new
-//            if (currentEvent != null) {
-                if (currentEvent?.setting == proposedStatus) {
-                    toast("Same setting exists already")
-                } else {
+            //
+           // if (currentEvent != null) {
+    //            if (currentEvent?.setting == proposedStatus) {
+      //              toast("Same setting exists already")
+      //          } else {
                     // Jos on tekstiä JA aika kalenterista on suurempi kuin systeemiaika
                     if (changeProposed && proposedRelay != "" && proposedStatus != "") {
 
@@ -209,8 +234,8 @@ class MainActivity : AppCompatActivity() {
                         val intent = Intent(applicationContext, MainActivity::class.java)
                         startActivity(intent)
                     }
-                }
-  //          }
+        //        }
+            //}
         }
     }
 
@@ -386,7 +411,7 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 canvasView.invalidate()
-                runOnUiThread{toast("Reminders are created")}
+                runOnUiThread{toast("Reminders are created if they were any")}
             }
         }
     }

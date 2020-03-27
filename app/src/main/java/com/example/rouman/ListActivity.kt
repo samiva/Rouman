@@ -2,6 +2,7 @@ package com.example.rouman
 
 import android.app.AlarmManager
 import android.content.Context
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -34,11 +35,12 @@ class ListActivity : AppCompatActivity() {
                 db.controlEventDao().clearDb()
                 db.close()
 
-                onResume()
+                val intent = Intent(applicationContext, ListActivity::class.java)
+                startActivity(intent)
             }
         }
-
     }
+
     override fun onResume(){
         super.onResume()
 
