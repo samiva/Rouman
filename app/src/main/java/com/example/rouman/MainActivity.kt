@@ -28,6 +28,8 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.listview_item.*
 import kotlinx.android.synthetic.main.listview_item.view.*
 import org.jetbrains.anko.uiThread
+import java.time.LocalDateTime
+import java.time.LocalTime
 
 ///////////////////////////////////////////////////////////////
 // Piirretään tietokanta ruutuun, vaihtaen painttia CanvasViewissä
@@ -338,10 +340,11 @@ class MainActivity : AppCompatActivity() {
         val intent = Intent(this, ReminderReceiver::class.java)
         intent.putExtra("relay",controlEvent.relay)
         intent.putExtra("setting",controlEvent.setting)
-
+        val currentTime = System.currentTimeMillis()
+        val futureTime = currentTime+10000 // ten seconds in future
         val pendingIntent = PendingIntent.getBroadcast(this, 1, intent, PendingIntent.FLAG_ONE_SHOT)
         val manager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        manager.setExact(AlarmManager.RTC_WAKEUP, controlEvent.time!!,pendingIntent)
+        manager.setExact(AlarmManager.RTC_WAKEUP, futureTime,pendingIntent)
     }
 
 /*    override fun onCreateOptionsMenu(menu: Menu): Boolean {
