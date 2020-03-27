@@ -264,13 +264,13 @@ class MainActivity : AppCompatActivity() {
         var sdf_h = SimpleDateFormat("HH")
         var sdf_m = SimpleDateFormat("mm")
 
-
+/*
         sdf_year.timeZone = tz
         sdf_month.timeZone = tz
         sdf_day.timeZone = tz
         sdf_h.timeZone = tz
         sdf_m.timeZone = tz
-
+*/
         val year = sdf_year.format(syTime).toInt()
         val month = sdf_month.format(syTime).toInt()
         val day = sdf_day.format(syTime).toInt()
@@ -281,8 +281,8 @@ class MainActivity : AppCompatActivity() {
         ////////////////////////////////////////////////////////////
         // KORJAA !!  KUN KUUKAUSI VAIHTUU kesken viikon
         ////////////////////////////////////////////////////////////
-
-        var calendar = GregorianCalendar(
+// var
+        calendar = GregorianCalendar(
             year,
             month,
             day - dayNumber + 1,
@@ -339,10 +339,16 @@ class MainActivity : AppCompatActivity() {
         intent.putExtra("relay",controlEvent.relay)
         intent.putExtra("setting",controlEvent.setting)
         val currentTime = System.currentTimeMillis()
-        val futureTime = currentTime+10000 // ten seconds in future
+        var delta = calendar.timeInMillis - System.currentTimeMillis()
+        val futureTime = controlEvent.time!! - delta
         val pendingIntent = PendingIntent.getBroadcast(this, 1, intent, PendingIntent.FLAG_ONE_SHOT)
         val manager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        manager.setExact(AlarmManager.RTC_WAKEUP, futureTime,pendingIntent)
+        manager.setExact(AlarmManager.RTC_WAKEUP, futureTime!!,pendingIntent)
+
+        var aInfo = manager.getNextAlarmClock()
+        val sdf = SimpleDateFormat("HH:mm dd")
+        var timeText = sdf.format(aInfo.triggerTime)
+
     }
 
 /*    override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -387,7 +393,7 @@ class MainActivity : AppCompatActivity() {
 
 
     companion object {
-
+        var calendar = GregorianCalendar()
         var cEventList: List<ControlEvent> = emptyList()
 
         var timeSetDp = 0f
