@@ -379,7 +379,6 @@ class MainActivity : AppCompatActivity() {
 //        val sdf = SimpleDateFormat("HH:mm dd")
 //        var timeText = sdf.format(aInfo.triggerTime)
 
->>>>>>> upstream/master
     }
 
 /*    override fun onCreateOptionsMenu(menu: Menu): Boolean {
