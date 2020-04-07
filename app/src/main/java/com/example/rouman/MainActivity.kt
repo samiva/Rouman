@@ -10,7 +10,10 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.icu.util.Calendar
+import android.icu.util.TimeZone
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
@@ -28,8 +31,10 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.listview_item.*
 import kotlinx.android.synthetic.main.listview_item.view.*
 import org.jetbrains.anko.uiThread
+import java.sql.Time
 import java.time.LocalDateTime
 import java.time.LocalTime
+import java.time.ZoneId
 
 ///////////////////////////////////////////////////////////////
 // Piirretään tietokanta ruutuun, vaihtaen painttia CanvasViewissä
@@ -374,6 +379,7 @@ class MainActivity : AppCompatActivity() {
 //        val sdf = SimpleDateFormat("HH:mm dd")
 //        var timeText = sdf.format(aInfo.triggerTime)
 
+>>>>>>> upstream/master
     }
 
 /*    override fun onCreateOptionsMenu(menu: Menu): Boolean {
