@@ -229,7 +229,7 @@ class MainActivity : AppCompatActivity() {
 
                         refreshList()
 
-                        canvasView.invalidate()
+                        //canvasView.invalidate()
 
                         val intent = Intent(applicationContext, MainActivity::class.java)
                         startActivity(intent)
@@ -409,9 +409,6 @@ class MainActivity : AppCompatActivity() {
                     if( curTime < event.time!!)
                         setAlarm(event)
                 }
-
-                canvasView.invalidate()
-                runOnUiThread{toast("Reminders are created if they were any")}
             }
         }
     }
