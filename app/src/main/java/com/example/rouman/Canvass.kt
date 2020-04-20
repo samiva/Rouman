@@ -177,6 +177,7 @@ class Canvass(context: Context, attrs: AttributeSet?) :
 
         }
     }
+
     private fun drawProposal(propoY: Float, canvas: Canvas){
 
         val width = canvas.getWidth()

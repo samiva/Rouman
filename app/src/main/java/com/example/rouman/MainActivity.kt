@@ -314,7 +314,7 @@ class MainActivity : AppCompatActivity() {
 // var
         calendar = GregorianCalendar(
             year,
-            month,
+            month-1,
             day - dayNumber + 1,
             0, //timePicker.currentHour,
             0
@@ -326,7 +326,7 @@ class MainActivity : AppCompatActivity() {
         // Aika viikon lopussa
         calendar = GregorianCalendar(
             year,
-            month,
+            month-1,
             day - dayNumber + 1+7,
             0, //timePicker.currentHour,
             0
@@ -351,7 +351,7 @@ class MainActivity : AppCompatActivity() {
 
         calendar = GregorianCalendar(
             year,
-            month,
+            month-1,
             day,
             h,
             m
@@ -379,7 +379,6 @@ class MainActivity : AppCompatActivity() {
 //        val sdf = SimpleDateFormat("HH:mm dd")
 //        var timeText = sdf.format(aInfo.triggerTime)
 
->>>>>>> upstream/master
     }
 
 /*    override fun onCreateOptionsMenu(menu: Menu): Boolean {
