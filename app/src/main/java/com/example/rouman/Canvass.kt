@@ -8,26 +8,29 @@
 package com.example.rouman;
 
 import android.content.Context
-import android.graphics.*
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Paint
+import android.os.CountDownTimer
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
-import com.example.rouman.MainActivity.Companion.timeSetDp
-import com.example.rouman.MainActivity.Companion.timeSet
-import com.example.rouman.MainActivity.Companion.timeOnWeekStart
-import com.example.rouman.MainActivity.Companion.timeOnWeekEnd
-import com.example.rouman.MainActivity.Companion.timeToDp
-import com.example.rouman.MainActivity.Companion.curTime
-import com.example.rouman.MainActivity.Companion.dpToTime
-import com.example.rouman.MainActivity.Companion.propoY
-import com.example.rouman.MainActivity.Companion.propoStatus
 import com.example.rouman.MainActivity.Companion.cEventList
+import com.example.rouman.MainActivity.Companion.curTime
 import com.example.rouman.MainActivity.Companion.curTimeDp
+import com.example.rouman.MainActivity.Companion.dpToTime
+import com.example.rouman.MainActivity.Companion.propoStatus
 import com.example.rouman.MainActivity.Companion.proposedRelay
-import kotlinx.android.synthetic.main.listview_item.view.*
+import com.example.rouman.MainActivity.Companion.timeOnWeekEnd
+import com.example.rouman.MainActivity.Companion.timeOnWeekStart
+import com.example.rouman.MainActivity.Companion.timeSet
+import com.example.rouman.MainActivity.Companion.timeSetDp
+import com.example.rouman.MainActivity.Companion.timeToDp
+import org.jetbrains.anko.toast
 import java.text.SimpleDateFormat
+import kotlin.math.abs
 
 
 class Canvass(context: Context, attrs: AttributeSet?) :
@@ -57,10 +60,21 @@ class Canvass(context: Context, attrs: AttributeSet?) :
         var paint = Paint()
 
         //////////////////////////////////////////////////////////////////
+        // Draw daily lines
+        paint.setARGB(255, 255, 0, 255)
+        paint.setStrokeWidth(4f)
+        drawLineZ(width/7*1.toFloat(), 0f, width/7*1.toFloat(), height, paint,canvas)
+        drawLineZ(width/7*2.toFloat(), 0f, width/7*2.toFloat(), height, paint,canvas)
+        drawLineZ(width/7*3.toFloat(), 0f, width/7*3.toFloat(), height, paint,canvas)
+        drawLineZ(width/7*4.toFloat(), 0f, width/7*4.toFloat(), height, paint,canvas)
+        drawLineZ(width/7*5.toFloat(), 0f, width/7*5.toFloat(), height, paint,canvas)
+        drawLineZ(width/7*6.toFloat(), 0f, width/7*6.toFloat(), height, paint,canvas)
+
+        //////////////////////////////////////////////////////////////////
         // Draw setting line
         paint.setARGB(255, 255, 0, 0)
         paint.setStrokeWidth(14f)
-        canvas.drawLine(timeSetDp.toFloat(), 0f, timeSetDp.toFloat(), height, paint)
+        drawLineZ(timeSetDp.toFloat(), 0f, timeSetDp.toFloat(), height, paint,canvas)
 
         ///////////////////////////////////////////////
         // Draw current timeline
@@ -74,7 +88,7 @@ class Canvass(context: Context, attrs: AttributeSet?) :
         paint.setStrokeWidth(4f)
 
         curTimeDp = (curTime-timeOnWeekStart) * timeToDp
-        canvas.drawLine(curTimeDp, 0f, curTimeDp, height, paint)
+        drawLineZ(curTimeDp, 0f, curTimeDp, height, paint, canvas)
 
         ////////////////////////////////////////////////////
         // Draw relay program line
@@ -158,24 +172,36 @@ class Canvass(context: Context, attrs: AttributeSet?) :
                     startX = curTimeDp // viimeinen voi alkaa ennen curtime
                 }
                 if (endX > curTimeDp) { // Piirretään vain jos loppupää on canvasin alueella
-                    canvas.drawLine(startX, plat_y, endX, plat_y, paint)
+                    drawLineZ(startX, plat_y, endX, plat_y, paint,canvas)
                     endX = startX // Seuraavanloppu on tämän alku
                 }
             }
             if (startXTime < timeOnWeekEnd  &&  endX>width) { // Eli jos on taitekohta pitää piirtää kahdessa välissä
                 // Näitä pitäs olla vain yks
-                canvas.drawLine(0f, plat_y, endX-width, plat_y, paint)
+                drawLineZ(0f, plat_y, endX-width, plat_y, paint,canvas)
                 endX = width.toFloat() // jatkopala loppuu canvasin oikeaan reunaan
-                canvas.drawLine(startX, plat_y, width.toFloat(), plat_y, paint)
+                drawLineZ(startX, plat_y, width.toFloat(), plat_y, paint,canvas)
                 endX = startX // Seuraava loppuu tähän
             }
             if (startXTime > timeOnWeekEnd && endX > width ) { // Jos on alku ja loppu width:n jälkeen, eli välillä 0-curtime
-                canvas.drawLine(startX-width, plat_y, endX-width, plat_y, paint)
+                drawLineZ(startX - width, plat_y, endX - width, plat_y, paint, canvas)
                 endX = startX // Seuraavanloppu on tämän alku
             }
-
-
         }
+    }
+
+    private fun drawLineZ(x1: Float,y1: Float ,x2: Float,y2: Float, p: Paint, canvas: Canvas){
+        var alfa = 1+0.01*zoom
+        var a: Float =(alfa*x1).toFloat()
+        var b: Float =(alfa*x2).toFloat()
+
+        if(zoom!=0) {
+            siirto =   (alfa * timeSetDp-width/2).toFloat()
+            a = a - siirto
+            b = b - siirto
+        }
+
+        canvas.drawLine(a, y1, b, y2, p)
     }
 
     private fun drawProposal(propoY: Float, canvas: Canvas){
@@ -201,37 +227,41 @@ class Canvass(context: Context, attrs: AttributeSet?) :
             paint.setStrokeWidth(14f)
 
             if(propoEnd <= timeOnWeekEnd* timeToDp && timeSetDp < curTimeDp) { // Molemmat curtimen vasemmalla puolella
-                canvas.drawLine(
+                drawLineZ(
                     timeSetDp.toFloat(),
                     propoY + 14,
                     propoEnd-width.toFloat(),
                     propoY + 14,
-                    paint
+                    paint,
+                    canvas
                 )
             }
             if(propoEnd > width && timeSetDp < width && timeSetDp > curTimeDp) { // Alkaa curtimen vasemmalta puolelta ja loppuu oikealle
-                canvas.drawLine(
+                drawLineZ(
                     0f,
                     propoY + 14,
                     propoEnd-width,
                     propoY + 14,
-                    paint
+                    paint,
+                    canvas
                 )
-                canvas.drawLine(
+                drawLineZ(
                     timeSetDp.toFloat(),
                     propoY + 14,
                     width.toFloat(),
                     propoY + 14,
-                    paint
+                    paint,
+                    canvas
                 )
             }
             if(propoEnd > curTimeDp && propoEnd <= width && timeSetDp < width && timeSetDp > curTimeDp) { // Alkaa ja loppuu curtimen oikealle puolelle
-                canvas.drawLine(
+                drawLineZ(
                     timeSetDp.toFloat(),
                     propoY + 14,
                     propoEnd,
                     propoY + 14,
-                    paint
+                    paint,
+                    canvas
                 )
             }
 
@@ -239,26 +269,57 @@ class Canvass(context: Context, attrs: AttributeSet?) :
 
     }
 
+
     // when ACTION_DOWN start touch according to the x,y values
     private fun startTouch(x: Float, y: Float) {
-        timeSetDp = x
+
+        if(zoomMAX==true){
+            zoomMAX=false
+        }
+        else {
+
+            if (zoom == 0) timeSetDp = x
+
+            timer_a = object : CountDownTimer(triggeringLength.toLong(), oneStep.toLong()) {
+                override fun onTick(millisUntilFinished: Long) {
+                    //context.toast("seconds remaining: " + millisUntilFinished / 1000)
+                    zoom += 6
+                }
+
+                override fun onFinish() {
+                    context.toast("MAX ZOOM")
+                    zoomMAX = true
+                }
+            }.start()
+        }
     }
 
     // when ACTION_MOVE move touch according to the x,y values
     private fun moveTouch(x: Float, y: Float) {
-            // Need to check later if tolerance can be used to improve usaiblity in slow motion
-            timeSetDp=x.toFloat()
-            val oneWeek = timeOnWeekEnd - timeOnWeekStart
-            if(timeSetDp >= curTimeDp)
-                timeSet = timeOnWeekStart + (timeSetDp*dpToTime).toLong()
-            else
-                timeSet = timeOnWeekStart + oneWeek + (timeSetDp*dpToTime).toLong()
 
-            val sdf_set = SimpleDateFormat("HH:mm dd")
-            var set = sdf_set.format(timeSet)
-            val tv = getRootView().findViewById<TextView>(R.id.text_timeSet)
-            if (tv != null)
-            {tv.text=set}
+        val oneWeek = timeOnWeekEnd - timeOnWeekStart
+
+        if(timeSetDp >= curTimeDp)
+            timeSet = timeOnWeekStart + (timeSetDp*dpToTime).toLong()
+        else
+            timeSet = timeOnWeekStart + oneWeek + (timeSetDp*dpToTime).toLong()
+
+        val sdf_set = SimpleDateFormat("HH:mm dd")
+        var set = sdf_set.format(timeSet)
+        val tv = getRootView().findViewById<TextView>(R.id.text_timeSet)
+        if (tv != null) {
+            tv.text=set
+        }
+
+        if(zoom !=0 && !zoomMAX) {
+            timeSetDp += x-timeSetDp
+            lastY = y
+        }
+
+        if(zoomMAX){
+            timeSetDp += (x-timeSetDp) / zoom
+        }
+
     }
 
     fun clearCanvas() {
@@ -267,7 +328,13 @@ class Canvass(context: Context, attrs: AttributeSet?) :
 
     // when ACTION_UP stop touch
     private fun upTouch() {
-//        mPath.lineTo(mX, mY)
+        timer_a.cancel()
+
+        if(zoomMAX==false){
+            zoom = 0
+            zoomMAX = false
+            siirto = 0f
+        }
     }
 
     //override the onTouchEvent
@@ -293,6 +360,15 @@ class Canvass(context: Context, attrs: AttributeSet?) :
 
     companion object {
         private const val TOLERANCE = 10f
+        private lateinit var timer_a: CountDownTimer
+        var zoom = 0
+        var siirto: Float = 0f
+        var zoomMAX: Boolean = false
+
+        val triggeringLength=3000
+        val oneStep = 10
+
+        var lastY: Float=0f
     }
 
     init {

@@ -35,6 +35,7 @@ import java.sql.Time
 import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.ZoneId
+import android.os.CountDownTimer as OsCountDownTimer
 
 ///////////////////////////////////////////////////////////////
 // Piirretään tietokanta ruutuun, vaihtaen painttia CanvasViewissä
@@ -178,69 +179,58 @@ class MainActivity : AppCompatActivity() {
             ///////////////////////////////////////////
             // Remove if same Time span
             if(sameTimeEvent!=null) {
- //               if (nextEvent!!.setting != proposedStatus) { // Samaan aikaan ja eriväri
-                    doAsync {
-                        val db =
-                            Room.databaseBuilder(
-                                    applicationContext,
-                                    AppDatabase::class.java,
-                                    "control_events"
-                                )
-                                .build()
-                        db.controlEventDao().deleteRowByData(
-                            time = sameTimeEvent!!.time,
-                            relay = sameTimeEvent!!.relay,
-                            setting = sameTimeEvent!!.setting
-                        )
-                        db.close()
-                    }
-  //              }
+                doAsync {
+                    val db =
+                        Room.databaseBuilder(
+                                applicationContext,
+                                AppDatabase::class.java,
+                                "control_events"
+                            )
+                            .build()
+                    db.controlEventDao().deleteRowByData(
+                        time = sameTimeEvent!!.time,
+                        relay = sameTimeEvent!!.relay,
+                        setting = sameTimeEvent!!.setting
+                    )
+                    db.close()
+                }
             }
 
             //////////////////////////////////////////////
-            //
-           // if (currentEvent != null) {
-    //            if (currentEvent?.setting == proposedStatus) {
-      //              toast("Same setting exists already")
-      //          } else {
-                    // Jos on tekstiä JA aika kalenterista on suurempi kuin systeemiaika
-                    if (changeProposed && proposedRelay != "" && proposedStatus != "") {
+            // Jos on tekstiä JA aika kalenterista on suurempi kuin systeemiaika
+            if (changeProposed && proposedRelay != "" && proposedStatus != "") {
 
-                        val newEvent = ControlEvent(
-                            uid = null,
-                            time = timeSet,
-                            relay = proposedRelay,
-                            setting = proposedStatus
-                        )
+                val newEvent = ControlEvent(
+                    uid = null,
+                    time = timeSet,
+                    relay = proposedRelay,
+                    setting = proposedStatus
+                )
 
-                        doAsync {
-                            val db =
-                                Room.databaseBuilder(
-                                        applicationContext,
-                                        AppDatabase::class.java,
-                                        "control_events"
-                                    )
-                                    .build()
-                            db.controlEventDao().insert(newEvent)
-                            db.close()
+                doAsync {
+                    val db =
+                        Room.databaseBuilder(
+                                applicationContext,
+                                AppDatabase::class.java,
+                                "control_events"
+                            )
+                            .build()
+                    db.controlEventDao().insert(newEvent)
+                    db.close()
 
-                            toast("Change saved and alarm created")
-                        }
+                    toast("Change saved and alarm created")
+                }
 
-                        changeProposed = false
-                        proposedRelay = ""
-                        proposedStatus = ""
-                        propoStatus = 0
+                changeProposed = false
+                proposedRelay = ""
+                proposedStatus = ""
+                propoStatus = 0
 
-                        refreshList()
+                refreshList()
 
-                        //canvasView.invalidate()
-
-                        val intent = Intent(applicationContext, MainActivity::class.java)
-                        startActivity(intent)
-                    }
-        //        }
-            //}
+                val intent = Intent(applicationContext, MainActivity::class.java)
+                startActivity(intent)
+            }
         }
     }
 
@@ -374,29 +364,7 @@ class MainActivity : AppCompatActivity() {
         val pendingIntent = PendingIntent.getBroadcast(this, 1, intent, PendingIntent.FLAG_ONE_SHOT)
         val manager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
         manager.setExact(AlarmManager.RTC_WAKEUP, futureTime!!,pendingIntent)
-
-//        var aInfo = manager.getNextAlarmClock()
-//        val sdf = SimpleDateFormat("HH:mm dd")
-//        var timeText = sdf.format(aInfo.triggerTime)
-
     }
-
-/*    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        menuInflater.inflate(R.menu.menu_main, menu)
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        return when (item.itemId) {
-            R.id.action_settings -> true
-            else -> super.onOptionsItemSelected(item)
-        }
-    }
-*/
 
     private fun refreshList(){
         doAsync {
@@ -417,8 +385,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
-
-
 
     companion object {
         var calendar = GregorianCalendar()
@@ -443,6 +409,7 @@ class MainActivity : AppCompatActivity() {
         var proposedStatus = ""
         var propoStatus = 0
         var propoY = 0f
+
     }
 }
 
