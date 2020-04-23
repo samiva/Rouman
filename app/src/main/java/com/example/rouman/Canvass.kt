@@ -103,22 +103,25 @@ class Canvass(context: Context, attrs: AttributeSet?) :
 
         /////////////////////////////////////////////////////////////
         // Draw proposal
+        val a=30
+        var h = getRootView().findViewById<Button>(R.id.buttonMA).height.toFloat()
+
         if(proposedRelay == "PLAT")
-            drawProposal(getRootView().findViewById<Button>(R.id.button12).top.toFloat(), canvas)
+            drawProposal(getRootView().findViewById<Button>(R.id.button12).top.toFloat()-h+a, canvas)
         if(proposedRelay == "VARV")
-            drawProposal(getRootView().findViewById<Button>(R.id.button13).top.toFloat(), canvas)
+            drawProposal(getRootView().findViewById<Button>(R.id.button13).top.toFloat()-h +a, canvas)
         if(proposedRelay == "VARK")
-            drawProposal(getRootView().findViewById<Button>(R.id.button14).top.toFloat(), canvas)
+            drawProposal(getRootView().findViewById<Button>(R.id.button14).top.toFloat()-h +a, canvas)
         if(proposedRelay == "VARO")
-            drawProposal(getRootView().findViewById<Button>(R.id.button15).top.toFloat(), canvas)
+            drawProposal(getRootView().findViewById<Button>(R.id.button15).top.toFloat()-h +a, canvas)
         if(proposedRelay == "PUMP")
-            drawProposal(getRootView().findViewById<Button>(R.id.button16).top.toFloat(), canvas)
+            drawProposal(getRootView().findViewById<Button>(R.id.button16).top.toFloat()-h +a, canvas)
         if(proposedRelay == "KVES")
-            drawProposal(getRootView().findViewById<Button>(R.id.button17).top.toFloat(), canvas)
+            drawProposal(getRootView().findViewById<Button>(R.id.button17).top.toFloat()-h +a, canvas)
         if(proposedRelay == "R7")
-            drawProposal(getRootView().findViewById<Button>(R.id.buttonR7).top.toFloat(), canvas)
+            drawProposal(getRootView().findViewById<Button>(R.id.buttonR7).top.toFloat()-h +a, canvas)
         if(proposedRelay == "R8")
-            drawProposal(getRootView().findViewById<Button>(R.id.buttonR8).top.toFloat(), canvas)
+            drawProposal(getRootView().findViewById<Button>(R.id.buttonR8).top.toFloat()-h +a, canvas)
 
     }
 
@@ -127,9 +130,10 @@ class Canvass(context: Context, attrs: AttributeSet?) :
     private fun drawProgram(relToDraw: String, canvas: Canvas){
         var paint = Paint()
         var plat_y: Float = 0f
-        val a=40
+        val a=20
 
         var h = getRootView().findViewById<Button>(R.id.buttonMA).height.toFloat()
+//        h=0f
         if(relToDraw == "PLAT")
             plat_y= getRootView().findViewById<Button>(R.id.button12).top.toFloat()-h +a
         if(relToDraw == "VARV")
@@ -208,7 +212,7 @@ class Canvass(context: Context, attrs: AttributeSet?) :
 
         val width = canvas.getWidth()
         var paint = Paint()
-
+        var s=7
         /////////////////////////////////////////////////////////7
         // Endpoint for proposal
         var propoEnd = curTimeDp + width
@@ -229,9 +233,9 @@ class Canvass(context: Context, attrs: AttributeSet?) :
             if(propoEnd <= timeOnWeekEnd* timeToDp && timeSetDp < curTimeDp) { // Molemmat curtimen vasemmalla puolella
                 drawLineZ(
                     timeSetDp.toFloat(),
-                    propoY + 14,
+                    propoY + s,
                     propoEnd-width.toFloat(),
-                    propoY + 14,
+                    propoY + s,
                     paint,
                     canvas
                 )
@@ -239,17 +243,17 @@ class Canvass(context: Context, attrs: AttributeSet?) :
             if(propoEnd > width && timeSetDp < width && timeSetDp > curTimeDp) { // Alkaa curtimen vasemmalta puolelta ja loppuu oikealle
                 drawLineZ(
                     0f,
-                    propoY + 14,
+                    propoY + s,
                     propoEnd-width,
-                    propoY + 14,
+                    propoY + s,
                     paint,
                     canvas
                 )
                 drawLineZ(
                     timeSetDp.toFloat(),
-                    propoY + 14,
+                    propoY + s,
                     width.toFloat(),
-                    propoY + 14,
+                    propoY + s,
                     paint,
                     canvas
                 )
@@ -257,9 +261,9 @@ class Canvass(context: Context, attrs: AttributeSet?) :
             if(propoEnd > curTimeDp && propoEnd <= width && timeSetDp < width && timeSetDp > curTimeDp) { // Alkaa ja loppuu curtimen oikealle puolelle
                 drawLineZ(
                     timeSetDp.toFloat(),
-                    propoY + 14,
+                    propoY + s,
                     propoEnd,
-                    propoY + 14,
+                    propoY + s,
                     paint,
                     canvas
                 )
