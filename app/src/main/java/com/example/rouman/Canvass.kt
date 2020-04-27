@@ -114,17 +114,17 @@ class Canvass(context: Context, attrs: AttributeSet?) :
         //////////////////////////////////////////////////////////////////
         // Draw setting line
         paint.setARGB(255, 255, 0, 0)
-        paint.setStrokeWidth(14f)
+        paint.setStrokeWidth(4f)
         drawLineZ(timeSetDp.toFloat(), 0f, timeSetDp.toFloat(), height, paint, canvas)
 //        drawLineZ(timeSet/timeToDp, 0f, timeSet/timeToDp.toFloat(), height, paint,canvas)
 
 
         /////////////////////////////////////////////////////////////
         // Draw proposal
-        val a = 30
+        val a = 40
 //        var h = getRootView().findViewById<Button>(R.id.text_timeSet).height.toFloat()*2
         var h=0f
-        paint.textSize = 10f
+        paint.textSize = 15f
         if (proposedRelay == "PLAT")
             t = getRootView().findViewById<Button>(R.id.button12).top.toFloat()
         if (proposedRelay == "VARV")
@@ -185,7 +185,7 @@ class Canvass(context: Context, attrs: AttributeSet?) :
                 paint.setARGB(255, 255, 0, 0)
             if (event.setting == "2")
                 paint.setARGB(255, 0, 0, 255)
-            paint.setStrokeWidth(14f)
+            paint.setStrokeWidth(20f)
 
             var eventTime = event.time!!.toLong()
             var startXTime = eventTime
