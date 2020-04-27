@@ -132,7 +132,14 @@ class MainActivity : AppCompatActivity() {
         }
 
 
+        /////////////////////////////////////////////////////////////////////////
+        // Luodaan settings puttonin toiminta
 
+        button_settings.setOnClickListener{
+            val intent = Intent(applicationContext, SettingsActivity::class.java)
+            startActivity(intent)
+
+        }
         /////////////////////////////////////////////////////////////////////////
         // Luodaan OK buttonin toiminta
         val button_confirm = findViewById<View>(R.id.button_confirm) as Button
@@ -160,7 +167,7 @@ class MainActivity : AppCompatActivity() {
             ///////////////////////////////////////////
             // Remove if re-setting
             if(nextEvent!=null) {
-                if (nextEvent!!.setting == proposedStatus) {
+                if (nextEvent.setting == proposedStatus) {
                     doAsync {
                         val db =
                             Room.databaseBuilder(
@@ -170,9 +177,9 @@ class MainActivity : AppCompatActivity() {
                                 )
                                 .build()
                         db.controlEventDao().deleteRowByData(
-                            time = nextEvent!!.time,
-                            relay = nextEvent!!.relay,
-                            setting = nextEvent!!.setting
+                            time = nextEvent.time,
+                            relay = nextEvent.relay,
+                            setting = nextEvent.setting
                         )
                         db.close()
                     }
@@ -191,9 +198,9 @@ class MainActivity : AppCompatActivity() {
                             )
                             .build()
                     db.controlEventDao().deleteRowByData(
-                        time = sameTimeEvent!!.time,
-                        relay = sameTimeEvent!!.relay,
-                        setting = sameTimeEvent!!.setting
+                        time = sameTimeEvent.time,
+                        relay = sameTimeEvent.relay,
+                        setting = sameTimeEvent.setting
                     )
                     db.close()
                 }
@@ -235,15 +242,15 @@ class MainActivity : AppCompatActivity() {
                 startActivity(intent)
             }
         }
-/*
+
         orientationEventListener = object : OrientationEventListener(applicationContext) {
             override fun onOrientationChanged(orientation: Int) {
                 // orientation is in degrees
-
+                toast("Changed")
                 timeSetDp = 0f
             }
         }
-  */
+
     }
 
     private fun stepPropoStatus(){

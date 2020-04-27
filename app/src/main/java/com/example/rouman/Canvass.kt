@@ -11,11 +11,15 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Paint
+import android.graphics.Rect
+import android.graphics.Typeface.DEFAULT_BOLD
 import android.os.CountDownTimer
 import android.util.AttributeSet
+import android.view.Gravity.BOTTOM
 import android.view.MotionEvent
 import android.view.View
 import android.widget.Button
+import android.widget.GridLayout.BOTTOM
 import android.widget.TextView
 import com.example.rouman.MainActivity.Companion.cEventList
 import com.example.rouman.MainActivity.Companion.curTime
@@ -42,6 +46,7 @@ class Canvass(context: Context, attrs: AttributeSet?) :
     private var mX = 0f
     private var mY = 0f
 
+
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
         // your Canvas will draw onto the defined Bitmap
@@ -64,25 +69,35 @@ class Canvass(context: Context, attrs: AttributeSet?) :
         // Draw daily lines
         paint.setARGB(255, 255, 0, 255)
         paint.setStrokeWidth(4f)
-        drawLineZ(width/7*1.toFloat(), 0f, width/7*1.toFloat(), height, paint,canvas)
-        drawLineZ(width/7*2.toFloat(), 0f, width/7*2.toFloat(), height, paint,canvas)
-        drawLineZ(width/7*3.toFloat(), 0f, width/7*3.toFloat(), height, paint,canvas)
-        drawLineZ(width/7*4.toFloat(), 0f, width/7*4.toFloat(), height, paint,canvas)
-        drawLineZ(width/7*5.toFloat(), 0f, width/7*5.toFloat(), height, paint,canvas)
-        drawLineZ(width/7*6.toFloat(), 0f, width/7*6.toFloat(), height, paint,canvas)
+        drawLineZ(width / 7 * 1.toFloat(), 0f, width / 7 * 1.toFloat(), height, paint, canvas)
+        drawLineZ(width / 7 * 2.toFloat(), 0f, width / 7 * 2.toFloat(), height, paint, canvas)
+        drawLineZ(width / 7 * 3.toFloat(), 0f, width / 7 * 3.toFloat(), height, paint, canvas)
+        drawLineZ(width / 7 * 4.toFloat(), 0f, width / 7 * 4.toFloat(), height, paint, canvas)
+        drawLineZ(width / 7 * 5.toFloat(), 0f, width / 7 * 5.toFloat(), height, paint, canvas)
+        drawLineZ(width / 7 * 6.toFloat(), 0f, width / 7 * 6.toFloat(), height, paint, canvas)
+
+ //       var t = getRootView().findViewById<Button>(R.id.text_timeSet).top.toFloat()
+        var t = 20f
+        drawTextZ("MAANANTAI", 0.5f, t, canvas)
+        drawTextZ("TIISTAI", width / 7 * 1.5.toFloat(), t, canvas)
+        drawTextZ("KESKIVIIKKO", width / 7 * 2.5.toFloat(), t, canvas)
+        drawTextZ("TORSTAII", width / 7 * 3.5.toFloat(), t, canvas)
+        drawTextZ("PERJANTAI", width / 7 * 4.5.toFloat(), t, canvas)
+        drawTextZ("LAUANTAI", width / 7 * 5.5.toFloat(), t, canvas)
+        drawTextZ("SUNNUNTAI", width / 7 * 6.5.toFloat(), t, canvas)
 
         ///////////////////////////////////////////////
         // Draw current timeline
 
-        val pros = ((curTime-timeOnWeekStart)/ (timeOnWeekEnd - timeOnWeekStart).toFloat())
+        val pros = ((curTime - timeOnWeekStart) / (timeOnWeekEnd - timeOnWeekStart).toFloat())
 
-        timeToDp =   width.toFloat() /(timeOnWeekEnd- timeOnWeekStart).toFloat()
-        dpToTime = 1/timeToDp
+        timeToDp = width.toFloat() / (timeOnWeekEnd - timeOnWeekStart).toFloat()
+        dpToTime = 1 / timeToDp
 
         paint.setARGB(255, 0, 0, 0)
         paint.setStrokeWidth(4f)
 
-        curTimeDp = (curTime-timeOnWeekStart) * timeToDp
+        curTimeDp = (curTime - timeOnWeekStart) * timeToDp
         drawLineZ(curTimeDp, 0f, curTimeDp, height, paint, canvas)
 
         ////////////////////////////////////////////////////
@@ -93,75 +108,77 @@ class Canvass(context: Context, attrs: AttributeSet?) :
         drawProgram("VARO", canvas)
         drawProgram("PUMP", canvas)
         drawProgram("KVES", canvas)
-        drawProgram("R7",  canvas)
-        drawProgram("R8",  canvas)
+        drawProgram("R7", canvas)
+        drawProgram("R8", canvas)
 
         //////////////////////////////////////////////////////////////////
         // Draw setting line
         paint.setARGB(255, 255, 0, 0)
         paint.setStrokeWidth(14f)
-        drawLineZ(timeSetDp.toFloat(), 0f, timeSetDp.toFloat(), height, paint,canvas)
+        drawLineZ(timeSetDp.toFloat(), 0f, timeSetDp.toFloat(), height, paint, canvas)
 //        drawLineZ(timeSet/timeToDp, 0f, timeSet/timeToDp.toFloat(), height, paint,canvas)
 
 
         /////////////////////////////////////////////////////////////
         // Draw proposal
-        val a=30
-        var h = getRootView().findViewById<Button>(R.id.buttonMA).height.toFloat()
+        val a = 30
+//        var h = getRootView().findViewById<Button>(R.id.text_timeSet).height.toFloat()*2
+        var h=0f
+        paint.textSize = 10f
+        if (proposedRelay == "PLAT")
+            t = getRootView().findViewById<Button>(R.id.button12).top.toFloat()
+        if (proposedRelay == "VARV")
+            t = getRootView().findViewById<Button>(R.id.button13).top.toFloat()
+        if (proposedRelay == "VARK")
+            t = getRootView().findViewById<Button>(R.id.button14).top.toFloat()
+        if (proposedRelay == "VARO")
+            t = getRootView().findViewById<Button>(R.id.button15).top.toFloat()
+        if (proposedRelay == "PUMP")
+            t = getRootView().findViewById<Button>(R.id.button16).top.toFloat()
+        if (proposedRelay == "KVES")
+            t = getRootView().findViewById<Button>(R.id.button17).top.toFloat()
+        if (proposedRelay == "R7")
+            t = getRootView().findViewById<Button>(R.id.buttonR7).top.toFloat()
+        if (proposedRelay == "R8")
+            t = getRootView().findViewById<Button>(R.id.buttonR8).top.toFloat()
 
-        if(proposedRelay == "PLAT")
-            drawProposal(getRootView().findViewById<Button>(R.id.button12).top.toFloat()-h+a, canvas)
-        if(proposedRelay == "VARV")
-            drawProposal(getRootView().findViewById<Button>(R.id.button13).top.toFloat()-h +a, canvas)
-        if(proposedRelay == "VARK")
-            drawProposal(getRootView().findViewById<Button>(R.id.button14).top.toFloat()-h +a, canvas)
-        if(proposedRelay == "VARO")
-            drawProposal(getRootView().findViewById<Button>(R.id.button15).top.toFloat()-h +a, canvas)
-        if(proposedRelay == "PUMP")
-            drawProposal(getRootView().findViewById<Button>(R.id.button16).top.toFloat()-h +a, canvas)
-        if(proposedRelay == "KVES")
-            drawProposal(getRootView().findViewById<Button>(R.id.button17).top.toFloat()-h +a, canvas)
-        if(proposedRelay == "R7")
-            drawProposal(getRootView().findViewById<Button>(R.id.buttonR7).top.toFloat()-h +a, canvas)
-        if(proposedRelay == "R8")
-            drawProposal(getRootView().findViewById<Button>(R.id.buttonR8).top.toFloat()-h +a, canvas)
+        drawProposal(t - h + a, canvas)
+        canvas.drawText("Proposal", 0f, t, paint)
 
     }
 
     ////////////////////////////////////////////////////
     // Draw relay program line
-    private fun drawProgram(relToDraw: String, canvas: Canvas){
+    private fun drawProgram(relToDraw: String, canvas: Canvas) {
         var paint = Paint()
         var plat_y: Float = 0f
-        val a=20
-
-        var h = getRootView().findViewById<Button>(R.id.buttonMA).height.toFloat()
-//        h=0f
-        if(relToDraw == "PLAT")
-            plat_y= getRootView().findViewById<Button>(R.id.button12).top.toFloat()-h +a
-        if(relToDraw == "VARV")
-            plat_y = getRootView().findViewById<Button>(R.id.button13).top.toFloat()-h+a
-        if(relToDraw == "VARK")
-            plat_y = getRootView().findViewById<Button>(R.id.button14).top.toFloat()-h+a
-        if(relToDraw == "VARO")
-            plat_y = getRootView().findViewById<Button>(R.id.button15).top.toFloat()-h+a
-        if(relToDraw == "PUMP")
-            plat_y = getRootView().findViewById<Button>(R.id.button16).top.toFloat()-h+a
-        if(relToDraw == "KVES")
-            plat_y = getRootView().findViewById<Button>(R.id.button17).top.toFloat()-h+a
-        if(relToDraw == "R7")
-            plat_y = getRootView().findViewById<Button>(R.id.buttonR7).top.toFloat()-h+a
-        if(relToDraw == "R8")
-            plat_y = getRootView().findViewById<Button>(R.id.buttonR8).top.toFloat()-h+a
-
+        val a = 20
+//        var h = getRootView().findViewById<Button>(R.id.text_timeSet).height.toFloat()*2
+        var h=0f
+        if (relToDraw == "PLAT")
+            plat_y = getRootView().findViewById<Button>(R.id.button12).top.toFloat() - h + a
+        if (relToDraw == "VARV")
+            plat_y = getRootView().findViewById<Button>(R.id.button13).top.toFloat() - h + a
+        if (relToDraw == "VARK")
+            plat_y = getRootView().findViewById<Button>(R.id.button14).top.toFloat() - h + a
+        if (relToDraw == "VARO")
+            plat_y = getRootView().findViewById<Button>(R.id.button15).top.toFloat() - h + a
+        if (relToDraw == "PUMP")
+            plat_y = getRootView().findViewById<Button>(R.id.button16).top.toFloat() - h + a
+        if (relToDraw == "KVES")
+            plat_y = getRootView().findViewById<Button>(R.id.button17).top.toFloat() - h + a
+        if (relToDraw == "R7")
+            plat_y = getRootView().findViewById<Button>(R.id.buttonR7).top.toFloat() - h + a
+        if (relToDraw == "R8")
+            plat_y = getRootView().findViewById<Button>(R.id.buttonR8).top.toFloat() - h + a
 
 
         var endXTime = curTime + timeOnWeekEnd - timeOnWeekStart
-        var endX= endXTime / dpToTime
-        endX =curTimeDp+width
+        var endX = endXTime / dpToTime
+        endX = curTimeDp + width
 
         var startX = 0f
-        for(event in cEventList.filter{r-> r.relay == relToDraw}) {
+        for (event in cEventList.filter { r -> r.relay == relToDraw }) {
             if (event.setting == "0")
                 paint.setARGB(255, 0, 0, 0)
             if (event.setting == "1")
@@ -174,41 +191,61 @@ class Canvass(context: Context, attrs: AttributeSet?) :
             var startXTime = eventTime
             startX = (eventTime - timeOnWeekStart) * timeToDp
 
-            if (startXTime < timeOnWeekEnd && endX > curTimeDp && endX <= width){ // Jos molemmat on välillä curtime - width
+            if (startXTime < timeOnWeekEnd && endX > curTimeDp && endX <= width) { // Jos molemmat on välillä curtime - width
                 if (startX < curTimeDp) {
                     startX = curTimeDp // viimeinen voi alkaa ennen curtime
                 }
                 if (endX > curTimeDp) { // Piirretään vain jos loppupää on canvasin alueella
-                    drawLineZ(startX, plat_y, endX, plat_y, paint,canvas)
+                    drawLineZ(startX, plat_y, endX, plat_y, paint, canvas)
                     endX = startX // Seuraavanloppu on tämän alku
                 }
             }
-            if (startXTime < timeOnWeekEnd  &&  endX>width) { // Eli jos on taitekohta pitää piirtää kahdessa välissä
+            if (startXTime < timeOnWeekEnd && endX > width) { // Eli jos on taitekohta pitää piirtää kahdessa välissä
                 // Näitä pitäs olla vain yks
-                drawLineZ(0f, plat_y, endX-width, plat_y, paint,canvas)
+                drawLineZ(0f, plat_y, endX - width, plat_y, paint, canvas)
                 endX = width.toFloat() // jatkopala loppuu canvasin oikeaan reunaan
-                drawLineZ(startX, plat_y, width.toFloat(), plat_y, paint,canvas)
+                drawLineZ(startX, plat_y, width.toFloat(), plat_y, paint, canvas)
                 endX = startX // Seuraava loppuu tähän
             }
-            if (startXTime > timeOnWeekEnd && endX > width ) { // Jos on alku ja loppu width:n jälkeen, eli välillä 0-curtime
+            if (startXTime > timeOnWeekEnd && endX > width) { // Jos on alku ja loppu width:n jälkeen, eli välillä 0-curtime
                 drawLineZ(startX - width, plat_y, endX - width, plat_y, paint, canvas)
                 endX = startX // Seuraavanloppu on tämän alku
             }
         }
     }
 
-    private fun drawLineZ(x1: Float,y1: Float ,x2: Float,y2: Float, p: Paint, canvas: Canvas){
-        var alfa = 1+0.01*zoom
-        var a: Float =(alfa*x1).toFloat()
-        var b: Float =(alfa*x2).toFloat()
+    private fun drawLineZ(x1: Float, y1: Float, x2: Float, y2: Float, p: Paint, canvas: Canvas) {
+        var alfa = 1 + 0.01 * zoom
+        var a: Float = (alfa * x1).toFloat()
+        var b: Float = (alfa * x2).toFloat()
 
-        if(zoom!=0) {
-            siirto =   (alfa * timeSetDp-width/2).toFloat()
+        if (zoom != 0) {
+            siirto = (alfa * timeSetDp - width / 2).toFloat()
             a = a - siirto
             b = b - siirto
         }
-
         canvas.drawLine(a, y1, b, y2, p)
+    }
+
+    private fun drawTextZ(str: String, x1: Float, y: Float , canvas: Canvas){
+        var pa = Paint()
+        pa.textSize = 12f + zoom/12
+        if (pa.textSize > 100) pa.textSize = 100f
+        pa.typeface = DEFAULT_BOLD
+//        pa.textScaleX = zoom/1000+1f
+        pa.textAlign = Paint.Align.CENTER
+        val textBound = Rect()
+        pa.getTextBounds(str,0,str.length, textBound)
+
+        var alfa = 1 + 0.01 * zoom
+        var a: Float = (alfa * x1).toFloat()
+
+        if (zoom != 0) {
+            siirto = (alfa * timeSetDp - width / 2).toFloat()
+            a = a - siirto
+        }
+
+        canvas.drawText(str,a, y + textBound.height(), pa)
     }
 
     private fun drawProposal(propoY: Float, canvas: Canvas){
