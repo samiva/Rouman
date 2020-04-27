@@ -39,6 +39,11 @@ class ListActivity : AppCompatActivity() {
                 startActivity(intent)
             }
         }
+
+        button_settings.setOnClickListener{
+            val intent = Intent(applicationContext, SettingsActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     override fun onResume(){
