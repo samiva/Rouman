@@ -44,6 +44,7 @@ class ListActivity : AppCompatActivity() {
             val intent = Intent(applicationContext, SettingsActivity::class.java)
             startActivity(intent)
         }
+
     }
 
     override fun onResume(){

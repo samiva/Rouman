@@ -135,7 +135,7 @@ class MainActivity : AppCompatActivity() {
         /////////////////////////////////////////////////////////////////////////
         // Luodaan settings puttonin toiminta
 
-        button_settings.setOnClickListener{
+        button_settings2.setOnClickListener{
             val intent = Intent(applicationContext, SettingsActivity::class.java)
             startActivity(intent)
 
