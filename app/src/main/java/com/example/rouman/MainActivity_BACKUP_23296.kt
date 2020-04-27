@@ -376,6 +376,20 @@ class MainActivity : AppCompatActivity() {
         val pendingIntent = PendingIntent.getBroadcast(this, 1, intent, PendingIntent.FLAG_ONE_SHOT)
         val manager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
         manager.setExact(AlarmManager.RTC_WAKEUP, futureTime!!,pendingIntent)
+<<<<<<< HEAD
+
+//        var aInfo = manager.getNextAlarmClock()
+//        val sdf = SimpleDateFormat("HH:mm dd")
+//        var timeText = sdf.format(aInfo.triggerTime)
+
+    }
+
+/*    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        menuInflater.inflate(R.menu.menu_main, menu)
+        return true
+=======
+>>>>>>> a6eb89308e2be3624513c0af2e18746d057fd984
     }
 
     private fun refreshList(){
