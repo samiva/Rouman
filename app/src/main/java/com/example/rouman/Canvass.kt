@@ -31,6 +31,7 @@ import com.example.rouman.MainActivity.Companion.timeToDp
 import org.jetbrains.anko.toast
 import java.text.SimpleDateFormat
 import kotlin.math.abs
+import kotlin.math.roundToLong
 
 
 class Canvass(context: Context, attrs: AttributeSet?) :
@@ -70,12 +71,6 @@ class Canvass(context: Context, attrs: AttributeSet?) :
         drawLineZ(width/7*5.toFloat(), 0f, width/7*5.toFloat(), height, paint,canvas)
         drawLineZ(width/7*6.toFloat(), 0f, width/7*6.toFloat(), height, paint,canvas)
 
-        //////////////////////////////////////////////////////////////////
-        // Draw setting line
-        paint.setARGB(255, 255, 0, 0)
-        paint.setStrokeWidth(14f)
-        drawLineZ(timeSetDp.toFloat(), 0f, timeSetDp.toFloat(), height, paint,canvas)
-
         ///////////////////////////////////////////////
         // Draw current timeline
 
@@ -100,6 +95,14 @@ class Canvass(context: Context, attrs: AttributeSet?) :
         drawProgram("KVES", canvas)
         drawProgram("R7",  canvas)
         drawProgram("R8",  canvas)
+
+        //////////////////////////////////////////////////////////////////
+        // Draw setting line
+        paint.setARGB(255, 255, 0, 0)
+        paint.setStrokeWidth(14f)
+        drawLineZ(timeSetDp.toFloat(), 0f, timeSetDp.toFloat(), height, paint,canvas)
+//        drawLineZ(timeSet/timeToDp, 0f, timeSet/timeToDp.toFloat(), height, paint,canvas)
+
 
         /////////////////////////////////////////////////////////////
         // Draw proposal
@@ -282,7 +285,7 @@ class Canvass(context: Context, attrs: AttributeSet?) :
         }
         else {
 
-            if (zoom == 0) timeSetDp = x
+            if (zoom == 0) timeSet = (x* dpToTime).roundToLong() // timeSetDp = x
 
             timer_a = object : CountDownTimer(triggeringLength.toLong(), oneStep.toLong()) {
                 override fun onTick(millisUntilFinished: Long) {

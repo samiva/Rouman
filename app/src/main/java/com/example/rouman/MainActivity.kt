@@ -14,6 +14,7 @@ import android.icu.util.Calendar
 import android.icu.util.TimeZone
 import android.os.Bundle
 import android.util.Log
+import android.view.OrientationEventListener
 import android.view.View
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
@@ -51,6 +52,8 @@ import android.os.CountDownTimer as OsCountDownTimer
 
 
 class MainActivity : AppCompatActivity() {
+    private var orientationEventListener: OrientationEventListener? = null
+
     private val neededPermissions = arrayOf(android.Manifest.permission.SEND_SMS)
 
     private fun checkPermissions() {
@@ -232,6 +235,15 @@ class MainActivity : AppCompatActivity() {
                 startActivity(intent)
             }
         }
+/*
+        orientationEventListener = object : OrientationEventListener(applicationContext) {
+            override fun onOrientationChanged(orientation: Int) {
+                // orientation is in degrees
+
+                timeSetDp = 0f
+            }
+        }
+  */
     }
 
     private fun stepPropoStatus(){
