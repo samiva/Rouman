@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="Preference_file_key" translatable="false">com.example.rouman.PREFERENCE_FILE_KEY</string>
+    <string name="Preferences_phone_number" translatable="false">com.example.rouman.PREFERENCE_PHONE_NUMBER</string>
+    <string name="Preferences_relay1" translatable="false">com.example.rouman.PREFERENCE_RELAY1</string>
+    <string name="Preferences_relay2" translatable="false">com.example.rouman.PREFERENCE_RELAY2</string>
+    <string name="Preferences_relay3" translatable="false">com.example.rouman.PREFERENCE_RELAY3</string>
+    <string name="Preferences_relay4" translatable="false">com.example.rouman.PREFERENCE_RELAY4</string>
+    <string name="Preferences_relay5" translatable="false">com.example.rouman.PREFERENCE_RELAY5</string>
+    <string name="Preferences_relay6" translatable="false">com.example.rouman.PREFERENCE_RELAY6</string>
+    <string name="Preferences_relay7" translatable="false">com.example.rouman.PREFERENCE_RELAY7</string>
+    <string name="Preferences_relay8" translatable="false">com.example.rouman.PREFERENCE_RELAY8</string>
+
+</resources>
