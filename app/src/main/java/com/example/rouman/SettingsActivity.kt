@@ -22,8 +22,8 @@ class SettingsActivity : AppCompatActivity() {
             with(sharedpref.edit()) {
 
                 fun setFieldValue(text: Editable, preference: Int) {
-                    if(text.isNotEmpty()||text.isNotBlank()) {
-                        toast("lol")
+                    if(text.toString()!="") {
+
                         putString(getString(preference), text.toString())
                     }
                 }

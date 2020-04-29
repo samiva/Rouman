@@ -10,10 +10,7 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.icu.util.Calendar
-import android.icu.util.TimeZone
 import android.os.Bundle
-import android.util.Log
 import android.view.OrientationEventListener
 import android.view.View
 import android.widget.Button
@@ -22,21 +19,13 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.room.Room
 import com.example.rouman.MessageSender.Companion.sendMessageToController
-import kotlinx.android.synthetic.main.activity_list.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.toast
 import java.text.SimpleDateFormat
 import java.util.*
 
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.listview_item.*
-import kotlinx.android.synthetic.main.listview_item.view.*
 import org.jetbrains.anko.uiThread
-import java.sql.Time
-import java.time.LocalDateTime
-import java.time.LocalTime
-import java.time.ZoneId
-import android.os.CountDownTimer as OsCountDownTimer
 
 ///////////////////////////////////////////////////////////////
 // Piirretään tietokanta ruutuun, vaihtaen painttia CanvasViewissä
@@ -78,6 +67,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         checkPermissions()
 
+        setRelayNames()
+
         button_list.setOnClickListener {
             val intent = Intent(applicationContext, ListActivity::class.java)
             startActivity(intent)
@@ -87,59 +78,93 @@ class MainActivity : AppCompatActivity() {
             toast("Nyt SMS pitäs lähteä testiviesti")
 
             var msg = "Releasetukset: PLAT" + "= 0" + "/"
-            sendMessageToController(applicationContext, msg, "0505617080")
+            if(phoneNumber!="0000000000")
+                sendMessageToController(applicationContext, msg, phoneNumber)
         }
 
-        button12.setOnClickListener {
+        btn_R1.setOnClickListener {
+            if(btn_R1.text.toString()==getString(R.string.NotAssigned))
+            {
+                toast("Erska")
+                return@setOnClickListener
+            }
             proposedRelay = "PLAT"
-            propoY = button12.getTop().toFloat()
+            propoY = btn_R1.getTop().toFloat()
             stepPropoStatus()
         }
-        button13.setOnClickListener {
+        btn_R2.setOnClickListener {
+            if(btn_R2.text.toString()==getString(R.string.NotAssigned))
+            {
+                toast("Erska")
+                return@setOnClickListener
+            }
             proposedRelay = "VARV"
-            propoY = button13.getTop().toFloat()
+            propoY = btn_R2.getTop().toFloat()
             stepPropoStatus()
         }
-        button14.setOnClickListener {
+        btn_R3.setOnClickListener {
+            if(btn_R3.text.toString()==getString(R.string.NotAssigned))
+            {
+                toast("Erska")
+                return@setOnClickListener
+            }
             proposedRelay = "VARK"
-            propoY = button14.getTop().toFloat()
+            propoY = btn_R3.getTop().toFloat()
             stepPropoStatus()
         }
-        button15.setOnClickListener {
+        btn_R4.setOnClickListener {
+            if(btn_R4.text.toString()==getString(R.string.NotAssigned))
+            {
+                toast("Erska")
+                return@setOnClickListener
+            }
             proposedRelay = "VARO"
-            propoY = button15.getTop().toFloat()
+            propoY = btn_R4.getTop().toFloat()
             stepPropoStatus()
         }
-        button16.setOnClickListener {
+        btn_R5.setOnClickListener {
+            if(btn_R5.text.toString()==getString(R.string.NotAssigned))
+            {
+                toast("Erska")
+                return@setOnClickListener
+            }
             proposedRelay = "PUMP"
-            propoY = button16.getTop().toFloat()
+            propoY = btn_R5.getTop().toFloat()
             stepPropoStatus()
         }
-        button17.setOnClickListener {
+        btn_R6.setOnClickListener {
+            if(btn_R6.text.toString()==getString(R.string.NotAssigned))
+            {
+                toast("Erska")
+                return@setOnClickListener
+            }
             proposedRelay = "KVES"
-            propoY = button17.getTop().toFloat()
+            propoY = btn_R6.getTop().toFloat()
             stepPropoStatus()
         }
-        buttonR7.setOnClickListener {
+        btn_R7.setOnClickListener {
+            if(btn_R7.text.toString()==getString(R.string.NotAssigned))
+            {
+                toast("Erska")
+                return@setOnClickListener
+            }
             proposedRelay = "R7"
-            propoY = buttonR7.getTop().toFloat()
+            propoY = btn_R7.getTop().toFloat()
             stepPropoStatus()
         }
-        buttonR8.setOnClickListener {
+        btn_R8.setOnClickListener {
+            if(btn_R8.text.toString()==getString(R.string.NotAssigned))
+            {
+                toast("Erska")
+                return@setOnClickListener
+            }
             proposedRelay = "R8"
-            propoY = buttonR8.getTop().toFloat()
+            propoY = btn_R8.getTop().toFloat()
             stepPropoStatus()
         }
 
 
-        /////////////////////////////////////////////////////////////////////////
-        // Luodaan settings puttonin toiminta
 
-        button_settings2.setOnClickListener{
-            val intent = Intent(applicationContext, SettingsActivity::class.java)
-            startActivity(intent)
-
-        }
         /////////////////////////////////////////////////////////////////////////
         // Luodaan OK buttonin toiminta
         val button_confirm = findViewById<View>(R.id.button_confirm) as Button
@@ -282,7 +307,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-
+        setRelayNames()
         val sdf_show = SimpleDateFormat("E dd.MM")
         val sdf_dayNumber = SimpleDateFormat("u")
         val sdf_now = SimpleDateFormat("dd.MM")
@@ -405,7 +430,35 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun setRelayNames() {
+        val settings = PreferencesUtils.getSettings(this)
+        val number = settings[0]
+        val R1_device = settings[1]
+        val R2_device = settings[2]
+        val R3_device = settings[3]
+        val R4_device = settings[4]
+        val R5_device = settings[5]
+        val R6_device = settings[6]
+        val R7_device = settings[7]
+        val R8_device = settings[8]
+        setRelayName(btn_R1, R1_device)
+        setRelayName(btn_R2, R2_device)
+        setRelayName(btn_R3, R3_device)
+        setRelayName(btn_R4, R4_device)
+        setRelayName(btn_R5, R5_device)
+        setRelayName(btn_R6, R6_device)
+        setRelayName(btn_R7, R7_device)
+        setRelayName(btn_R8, R8_device)
+
+        phoneNumber = number
+    }
+
+    private fun setRelayName(btn:Button?, text:String) {
+         btn?.text = text
+    }
+
     companion object {
+        var phoneNumber: String = ""
         var calendar = GregorianCalendar()
         var cEventList: List<ControlEvent> = emptyList()
 

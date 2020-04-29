@@ -126,21 +126,21 @@ class Canvass(context: Context, attrs: AttributeSet?) :
         var h=0f
         paint.textSize = 15f
         if (proposedRelay == "PLAT")
-            t = getRootView().findViewById<Button>(R.id.button12).top.toFloat()
+            t = getRootView().findViewById<Button>(R.id.btn_R1).top.toFloat()
         if (proposedRelay == "VARV")
-            t = getRootView().findViewById<Button>(R.id.button13).top.toFloat()
+            t = getRootView().findViewById<Button>(R.id.btn_R2).top.toFloat()
         if (proposedRelay == "VARK")
-            t = getRootView().findViewById<Button>(R.id.button14).top.toFloat()
+            t = getRootView().findViewById<Button>(R.id.btn_R3).top.toFloat()
         if (proposedRelay == "VARO")
-            t = getRootView().findViewById<Button>(R.id.button15).top.toFloat()
+            t = getRootView().findViewById<Button>(R.id.btn_R4).top.toFloat()
         if (proposedRelay == "PUMP")
-            t = getRootView().findViewById<Button>(R.id.button16).top.toFloat()
+            t = getRootView().findViewById<Button>(R.id.btn_R5).top.toFloat()
         if (proposedRelay == "KVES")
-            t = getRootView().findViewById<Button>(R.id.button17).top.toFloat()
+            t = getRootView().findViewById<Button>(R.id.btn_R6).top.toFloat()
         if (proposedRelay == "R7")
-            t = getRootView().findViewById<Button>(R.id.buttonR7).top.toFloat()
+            t = getRootView().findViewById<Button>(R.id.btn_R7).top.toFloat()
         if (proposedRelay == "R8")
-            t = getRootView().findViewById<Button>(R.id.buttonR8).top.toFloat()
+            t = getRootView().findViewById<Button>(R.id.btn_R8).top.toFloat()
 
         drawProposal(t - h + a, canvas)
         canvas.drawText("Proposal", 0f, t, paint)
@@ -156,21 +156,21 @@ class Canvass(context: Context, attrs: AttributeSet?) :
 //        var h = getRootView().findViewById<Button>(R.id.text_timeSet).height.toFloat()*2
         var h=0f
         if (relToDraw == "PLAT")
-            plat_y = getRootView().findViewById<Button>(R.id.button12).top.toFloat() - h + a
+            plat_y = getRootView().findViewById<Button>(R.id.btn_R1).top.toFloat() - h + a
         if (relToDraw == "VARV")
-            plat_y = getRootView().findViewById<Button>(R.id.button13).top.toFloat() - h + a
+            plat_y = getRootView().findViewById<Button>(R.id.btn_R2).top.toFloat() - h + a
         if (relToDraw == "VARK")
-            plat_y = getRootView().findViewById<Button>(R.id.button14).top.toFloat() - h + a
+            plat_y = getRootView().findViewById<Button>(R.id.btn_R3).top.toFloat() - h + a
         if (relToDraw == "VARO")
-            plat_y = getRootView().findViewById<Button>(R.id.button15).top.toFloat() - h + a
+            plat_y = getRootView().findViewById<Button>(R.id.btn_R4).top.toFloat() - h + a
         if (relToDraw == "PUMP")
-            plat_y = getRootView().findViewById<Button>(R.id.button16).top.toFloat() - h + a
+            plat_y = getRootView().findViewById<Button>(R.id.btn_R5).top.toFloat() - h + a
         if (relToDraw == "KVES")
-            plat_y = getRootView().findViewById<Button>(R.id.button17).top.toFloat() - h + a
+            plat_y = getRootView().findViewById<Button>(R.id.btn_R6).top.toFloat() - h + a
         if (relToDraw == "R7")
-            plat_y = getRootView().findViewById<Button>(R.id.buttonR7).top.toFloat() - h + a
+            plat_y = getRootView().findViewById<Button>(R.id.btn_R7).top.toFloat() - h + a
         if (relToDraw == "R8")
-            plat_y = getRootView().findViewById<Button>(R.id.buttonR8).top.toFloat() - h + a
+            plat_y = getRootView().findViewById<Button>(R.id.btn_R8).top.toFloat() - h + a
 
 
         var endXTime = curTime + timeOnWeekEnd - timeOnWeekStart

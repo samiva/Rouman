@@ -116,7 +116,7 @@
         android:layout_marginEnd="32dp"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="@string/NotAssigned"
+        android:hint="@string/NotAssigned"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/tv_R1" />
 
@@ -127,7 +127,7 @@
         android:layout_marginEnd="32dp"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="@string/NotAssigned"
+        android:hint="@string/NotAssigned"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/et_R1" />
 
@@ -138,7 +138,7 @@
         android:layout_marginEnd="32dp"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="@string/NotAssigned"
+        android:hint="@string/NotAssigned"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/et_R2" />
 
@@ -148,8 +148,8 @@
         android:layout_height="43dp"
         android:layout_marginEnd="32dp"
         android:ems="10"
+        android:hint="@string/NotAssigned"
         android:inputType="textPersonName"
-        android:text="@string/NotAssigned"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/et_R3" />
 
@@ -160,7 +160,7 @@
         android:layout_marginEnd="32dp"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="@string/NotAssigned"
+        android:hint="@string/NotAssigned"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/et_R4" />
 
@@ -171,7 +171,7 @@
         android:layout_marginEnd="32dp"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="@string/NotAssigned"
+        android:hint="@string/NotAssigned"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/et_R5" />
 
@@ -182,7 +182,7 @@
         android:layout_marginEnd="32dp"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="@string/NotAssigned"
+        android:hint="@string/NotAssigned"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/et_R6" />
 
@@ -193,7 +193,7 @@
         android:layout_marginEnd="32dp"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="@string/NotAssigned"
+        android:hint="@string/NotAssigned"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/et_R7" />
 
