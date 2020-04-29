@@ -46,7 +46,7 @@ class SettingsActivity : AppCompatActivity() {
                 setFieldValue(et_R8.text, R.string.Preferences_relay8)
                 commit()
             }
-            val number = sharedpref.getString(getString(R.string.Preferences_phone_number), "wm")
+//            val number = sharedpref.getString(getString(R.string.Preferences_phone_number), "wm")
 //            toast(number)
         }
     }
