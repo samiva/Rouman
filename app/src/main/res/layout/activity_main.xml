@@ -7,85 +7,85 @@
     tools:context=".MainActivity">
 
     <Button
-        android:id="@+id/button12"
+        android:id="@+id/btn_R1"
         android:layout_width="70dp"
         android:layout_height="0dp"
         android:text="PLAT"
-        app:layout_constraintBottom_toTopOf="@+id/button13"
+        app:layout_constraintBottom_toTopOf="@+id/btn_R2"
         app:layout_constraintEnd_toEndOf="@id/text_timeSet"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/text_timeSet"
         app:layout_constraintVertical_bias="0.5" />
 
     <Button
-        android:id="@+id/button13"
+        android:id="@+id/btn_R2"
         android:layout_width="70dp"
         android:layout_height="0dp"
         android:text="VARV"
-        app:layout_constraintEnd_toEndOf="@+id/button12"
+        app:layout_constraintEnd_toEndOf="@+id/btn_R1"
         app:layout_constraintVertical_bias="0.5"
-        app:layout_constraintBottom_toTopOf="@+id/button14"
-        app:layout_constraintTop_toBottomOf="@+id/button12" />
+        app:layout_constraintBottom_toTopOf="@+id/btn_R3"
+        app:layout_constraintTop_toBottomOf="@+id/btn_R1" />
 
     <Button
-        android:id="@+id/button14"
+        android:id="@+id/btn_R3"
         android:layout_width="70dp"
         android:layout_height="0dp"
         android:text="VARK"
-        app:layout_constraintEnd_toEndOf="@+id/button13"
+        app:layout_constraintEnd_toEndOf="@+id/btn_R2"
         app:layout_constraintVertical_bias="0.5"
-        app:layout_constraintBottom_toTopOf="@+id/button15"
-        app:layout_constraintTop_toBottomOf="@+id/button13" />
+        app:layout_constraintBottom_toTopOf="@+id/btn_R4"
+        app:layout_constraintTop_toBottomOf="@+id/btn_R2" />
 
     <Button
-        android:id="@+id/button15"
+        android:id="@+id/btn_R4"
         android:layout_width="70dp"
         android:layout_height="0dp"
         android:text="VARO"
-        app:layout_constraintEnd_toEndOf="@+id/button14"
+        app:layout_constraintEnd_toEndOf="@+id/btn_R3"
         app:layout_constraintVertical_bias="0.5"
-        app:layout_constraintBottom_toTopOf="@+id/button16"
-        app:layout_constraintTop_toBottomOf="@+id/button14" />
+        app:layout_constraintBottom_toTopOf="@+id/btn_R5"
+        app:layout_constraintTop_toBottomOf="@+id/btn_R3" />
 
     <Button
-        android:id="@+id/button16"
+        android:id="@+id/btn_R5"
         android:layout_width="70dp"
         android:layout_height="0dp"
         android:text="PUMP"
-        app:layout_constraintEnd_toEndOf="@+id/button15"
+        app:layout_constraintEnd_toEndOf="@+id/btn_R4"
         app:layout_constraintVertical_bias="0.5"
-        app:layout_constraintBottom_toTopOf="@+id/button17"
-        app:layout_constraintTop_toBottomOf="@+id/button15" />
+        app:layout_constraintBottom_toTopOf="@+id/btn_R6"
+        app:layout_constraintTop_toBottomOf="@+id/btn_R4" />
 
     <Button
-        android:id="@+id/button17"
+        android:id="@+id/btn_R6"
         android:layout_width="70dp"
         android:layout_height="0dp"
         android:text="KVES"
-        app:layout_constraintEnd_toEndOf="@+id/button16"
+        app:layout_constraintEnd_toEndOf="@+id/btn_R5"
         app:layout_constraintVertical_bias="0.5"
-        app:layout_constraintBottom_toTopOf="@+id/buttonR7"
-        app:layout_constraintTop_toBottomOf="@+id/button16" />
+        app:layout_constraintBottom_toTopOf="@+id/btn_R7"
+        app:layout_constraintTop_toBottomOf="@+id/btn_R5" />
 
     <Button
-        android:id="@+id/buttonR7"
+        android:id="@+id/btn_R7"
         android:layout_width="70dp"
         android:layout_height="0dp"
         android:text="R7"
-        app:layout_constraintEnd_toEndOf="@+id/button17"
+        app:layout_constraintEnd_toEndOf="@+id/btn_R6"
         app:layout_constraintVertical_bias="0.5"
-        app:layout_constraintBottom_toTopOf="@+id/buttonR8"
-        app:layout_constraintTop_toBottomOf="@+id/button17" />
+        app:layout_constraintBottom_toTopOf="@+id/btn_R8"
+        app:layout_constraintTop_toBottomOf="@+id/btn_R6" />
 
     <Button
-        android:id="@+id/buttonR8"
+        android:id="@+id/btn_R8"
         android:layout_width="70dp"
         android:layout_height="0dp"
         android:text="R8"
-        app:layout_constraintEnd_toEndOf="@+id/buttonR7"
+        app:layout_constraintEnd_toEndOf="@+id/btn_R7"
         app:layout_constraintVertical_bias="0.5"
         app:layout_constraintBottom_toTopOf="@+id/button_confirm"
-        app:layout_constraintTop_toBottomOf="@+id/buttonR7" />
+        app:layout_constraintTop_toBottomOf="@+id/btn_R7" />
 
 
     <TextView
@@ -118,10 +118,10 @@
         android:id="@+id/canvasView"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="@+id/buttonR8"
+        app:layout_constraintBottom_toBottomOf="@+id/btn_R8"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/button15"
+        app:layout_constraintStart_toEndOf="@+id/btn_R4"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0" />
 
@@ -132,7 +132,7 @@
         android:text="Send Now"
         app:layout_constraintEnd_toStartOf="@+id/button_confirm"
         app:layout_constraintStart_toEndOf="@+id/button_settings2"
-        app:layout_constraintTop_toBottomOf="@+id/buttonR8" />
+        app:layout_constraintTop_toBottomOf="@+id/btn_R8" />
 
     <Button
         android:id="@+id/button_list"
@@ -148,7 +148,7 @@
         android:layout_height="45dp"
         android:text="Settings"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonR8" />
+        app:layout_constraintTop_toBottomOf="@+id/btn_R8" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
