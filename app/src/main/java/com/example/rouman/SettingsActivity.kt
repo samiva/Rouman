@@ -22,6 +22,9 @@ class SettingsActivity : AppCompatActivity() {
         // If preferences already set, show them
         var settings = PreferencesUtils.getSettings(this)
 
+        var num = settings[0]
+        et_number.hint = num
+
         val R1_device = settings[1]
         val R2_device = settings[2]
         val R3_device = settings[3]

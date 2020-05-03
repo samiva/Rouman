@@ -88,6 +88,7 @@ class MainActivity : AppCompatActivity() {
                 toast("Erska")
                 return@setOnClickListener
             }
+            realRelay = btn_R1.text.toString()
             proposedRelay = "PLAT"
             propoY = btn_R1.getTop().toFloat()
             stepPropoStatus()
@@ -98,6 +99,7 @@ class MainActivity : AppCompatActivity() {
                 toast("Erska")
                 return@setOnClickListener
             }
+            realRelay = btn_R2.text.toString()
             proposedRelay = "VARV"
             propoY = btn_R2.getTop().toFloat()
             stepPropoStatus()
@@ -108,6 +110,7 @@ class MainActivity : AppCompatActivity() {
                 toast("Erska")
                 return@setOnClickListener
             }
+            realRelay = btn_R3.text.toString()
             proposedRelay = "VARK"
             propoY = btn_R3.getTop().toFloat()
             stepPropoStatus()
@@ -118,6 +121,7 @@ class MainActivity : AppCompatActivity() {
                 toast("Erska")
                 return@setOnClickListener
             }
+            realRelay = btn_R4.text.toString()
             proposedRelay = "VARO"
             propoY = btn_R4.getTop().toFloat()
             stepPropoStatus()
@@ -128,6 +132,7 @@ class MainActivity : AppCompatActivity() {
                 toast("Erska")
                 return@setOnClickListener
             }
+            realRelay = btn_R5.text.toString()
             proposedRelay = "PUMP"
             propoY = btn_R5.getTop().toFloat()
             stepPropoStatus()
@@ -138,6 +143,7 @@ class MainActivity : AppCompatActivity() {
                 toast("Erska")
                 return@setOnClickListener
             }
+            realRelay = btn_R6.text.toString()
             proposedRelay = "KVES"
             propoY = btn_R6.getTop().toFloat()
             stepPropoStatus()
@@ -148,6 +154,7 @@ class MainActivity : AppCompatActivity() {
                 toast("Erska")
                 return@setOnClickListener
             }
+            realRelay = btn_R7.text.toString()
             proposedRelay = "R7"
             propoY = btn_R7.getTop().toFloat()
             stepPropoStatus()
@@ -158,6 +165,7 @@ class MainActivity : AppCompatActivity() {
                 toast("Erska")
                 return@setOnClickListener
             }
+            realRelay = btn_R8.text.toString()
             proposedRelay = "R8"
             propoY = btn_R8.getTop().toFloat()
             stepPropoStatus()
@@ -192,6 +200,7 @@ class MainActivity : AppCompatActivity() {
             ///////////////////////////////////////////
             // Remove if re-setting
             if(nextEvent!=null) {
+                val num = PreferencesUtils.getSettings(this)[0]
                 if (nextEvent.setting == proposedStatus) {
                     doAsync {
                         val db =
@@ -204,7 +213,9 @@ class MainActivity : AppCompatActivity() {
                         db.controlEventDao().deleteRowByData(
                             time = nextEvent.time,
                             relay = nextEvent.relay,
-                            setting = nextEvent.setting
+                            setting = nextEvent.setting,
+                            number = num
+
                         )
                         db.close()
                     }
@@ -214,6 +225,7 @@ class MainActivity : AppCompatActivity() {
             ///////////////////////////////////////////
             // Remove if same Time span
             if(sameTimeEvent!=null) {
+                val num = PreferencesUtils.getSettings(this)[0]
                 doAsync {
                     val db =
                         Room.databaseBuilder(
@@ -225,7 +237,8 @@ class MainActivity : AppCompatActivity() {
                     db.controlEventDao().deleteRowByData(
                         time = sameTimeEvent.time,
                         relay = sameTimeEvent.relay,
-                        setting = sameTimeEvent.setting
+                        setting = sameTimeEvent.setting,
+                        number = num
                     )
                     db.close()
                 }
@@ -234,12 +247,13 @@ class MainActivity : AppCompatActivity() {
             //////////////////////////////////////////////
             // Jos on tekstiä JA aika kalenterista on suurempi kuin systeemiaika
             if (changeProposed && proposedRelay != "" && proposedStatus != "") {
-
+                val num = PreferencesUtils.getSettings(this)[0]
                 val newEvent = ControlEvent(
                     uid = null,
                     time = timeSet,
-                    relay = proposedRelay,
-                    setting = proposedStatus
+                    relay = realRelay,
+                    setting = proposedStatus,
+                    number= num
                 )
 
                 doAsync {
@@ -258,6 +272,7 @@ class MainActivity : AppCompatActivity() {
 
                 changeProposed = false
                 proposedRelay = ""
+                realRelay=""
                 proposedStatus = ""
                 propoStatus = 0
 
@@ -402,6 +417,7 @@ class MainActivity : AppCompatActivity() {
         val intent = Intent(this, ReminderReceiver::class.java)
         intent.putExtra("relay",controlEvent.relay)
         intent.putExtra("setting",controlEvent.setting)
+        intent.putExtra("number", controlEvent.number)
         val currentTime = System.currentTimeMillis()
         var delta = calendar.timeInMillis - System.currentTimeMillis()
         val futureTime = controlEvent.time!! - delta
@@ -479,6 +495,7 @@ class MainActivity : AppCompatActivity() {
 
         var proposedRelay = ""
         var proposedStatus = ""
+        var realRelay = ""
         var propoStatus = 0
         var propoY = 0f
 
