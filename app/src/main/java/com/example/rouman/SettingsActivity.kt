@@ -3,6 +3,7 @@ package com.example.rouman
 import android.content.Context
 import android.os.Bundle
 import android.text.Editable
+import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.settings_activity.*
 import org.jetbrains.anko.toast
@@ -17,6 +18,27 @@ class SettingsActivity : AppCompatActivity() {
 //            .replace(R.id.settings, SettingsFragment())
 //            .commit()
 //        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+        // If preferences already set, show them
+        var settings = PreferencesUtils.getSettings(this)
+
+        val R1_device = settings[1]
+        val R2_device = settings[2]
+        val R3_device = settings[3]
+        val R4_device = settings[4]
+        val R5_device = settings[5]
+        val R6_device = settings[6]
+        val R7_device = settings[7]
+        val R8_device = settings[8]
+        setRelayName(et_R1, R1_device)
+        setRelayName(et_R2, R2_device)
+        setRelayName(et_R3, R3_device)
+        setRelayName(et_R4, R4_device)
+        setRelayName(et_R5, R5_device)
+        setRelayName(et_R6, R6_device)
+        setRelayName(et_R7, R7_device)
+        setRelayName(et_R8, R8_device)
+
         btn_confirm.setOnClickListener{
             val sharedpref = this.getSharedPreferences(getString(R.string.Preference_file_key), Context.MODE_PRIVATE)
             with(sharedpref.edit()) {
@@ -49,6 +71,11 @@ class SettingsActivity : AppCompatActivity() {
 //            val number = sharedpref.getString(getString(R.string.Preferences_phone_number), "wm")
 //            toast(number)
         }
+
+    }
+
+    private fun setRelayName(textEdit: EditText?, text:String) {
+        textEdit?.hint = text
     }
 
 //    class SettingsFragment : PreferenceFragmentCompat() {
